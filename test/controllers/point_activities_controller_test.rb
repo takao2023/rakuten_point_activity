@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PointActivitysControllerTest < ActionDispatch::IntegrationTest
+class PointActivitiesControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
