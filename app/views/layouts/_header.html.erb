@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-md shadow-sm">
+  <div class="container">
+    <div class="w-100 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <%= link_to root_path, data: { turbolinks: false } do %>
+          <%= image_tag "logo.png", class: "img-fluid", width: "180px" %>
+        <% end %>
+        <p class="text-white d-md-block fw-bold fs-2 mb-0">ちいかつマネージャー</p>
+      </div>
+      <div class="d-flex justify-content-end align-items-center pull-right">
+
+          <p class="text-white d-md-block d-none fs-6 pe-2 mt-3 mx-5">目標ポイント設定</p>
+          <p class="text-white d-md-block d-none fs-6 pe-2 mt-3 mx-5">獲得ポイント登録</p>
+          <p class="text-white d-md-block d-none fs-6 pe-2 mt-3 ml-5">ユーザーネーム</p>
+          <div class="dropdown">
+            <a class="dropdown-toggle text-purple" data-bs-toggle="dropdown" href="#"></a>
+            <div class="dropdown-menu dropdown-menu-end shadow text-center" style="padding: 4px 0px;">
+              <%= link_to "アカウント編集", "test", class: "dropdown-item text-secondary border-bottom py-2", data: { turbolinks: false } %>
+              <%= link_to "ログアウト", "test", class: "dropdown-item text-secondary py-2", method: :delete %>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
