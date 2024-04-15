@@ -1,14 +1,12 @@
-#footer,.navbar {
+#footer {
+  background-color: #325242;
+}
+
+.navbar {
   background-color: #325242;
 }
 
 .container{
-  margin-left: 0;
-  padding-left: 0;
-  margin-right: 0;
-  padding-right: 0;
-}
-
-.header-right-content {
-    margin-right: 20px;
+  margin-left: 0px;
+  padding-left: 0px;
 }
