@@ -1,0 +1,18 @@
+<h2 class="devise_title">ログイン</h2>
+
+<%= form_with model: resource, url: session_path(resource_name), local: true, class: 'form' do |f| %>
+
+  <div class="form__group">
+    <p><%= f.label :email, 'メールアドレス（必須）:' %></p>
+    <p><%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form__input' %></p>
+  </div>
+
+  <div class="form__group">
+    <p><%= f.label :password, 'パスワード（必須）:' %></p>
+    <p><%= f.password_field :password, autocomplete: 'current-password', class: 'form__input' %></p>
+  </div>
+
+  <div class="form__submit">
+    <p><%= f.submit 'ログインする', class: 'form__button' %></p>
+  </div>
+<% end %>
