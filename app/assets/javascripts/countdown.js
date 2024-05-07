@@ -67,12 +67,12 @@
       if (timeInSeconds < 0) {
         clearInterval(countdownInterval);
         timerDisplay.in
-        nerHTML = "Time is up!";
+        nerHTML = "Time's up!";
       }
   
       if (timeInSeconds < 0) {
         clearInterval(countdownInterval);
-        timerDisplay.innerHTML = "Time is up!";
+        timerDisplay.innerHTML = "Time's up!";
         alert("時間が経過しました。ポイかつに進み次のタイマーを設定してください。"); // タイマー終了時にメッセージを表示する
       }
     }, 1000); // Update every second

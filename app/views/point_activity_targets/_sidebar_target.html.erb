@@ -1,5 +1,5 @@
 <div class="mb-2" style="padding: 4px;">
-  <p class="text-secondary fw-bold fs-5">今月の目標　達成度</p>
+  <p class="text-main fw-bold fs-5">今月の目標　達成度</p>
     <div class="square align-middle　align-middle">
       <% total_points_month = @point_activity_targets_month.sum(&:total_target_point) %>
       <% total_get_points_month = @point_activity_get_this_month.sum(&:total_get_point) %>
@@ -16,7 +16,7 @@
 </div>
 
 <div class="mb-2" style="padding: 4px;">
-  <p class="text-secondary fw-bold fs-5">設定しているポイかつ</p>
+  <p class="text-main fw-bold fs-5">設定しているポイかつ</p>
   <div class="card shadow">
     <div class="card-body p-3">
       <% @point_activity_targets_month.each do |point_activity_target| %>
@@ -30,7 +30,7 @@
 </div>
 
 <div class="mb-2" style="padding: 4px;">
-  <p class="text-secondary fw-bold fs-5">おすすめのポイかつ</p>
+  <p class="text-main fw-bold fs-5">おすすめのポイかつ</p>
   <div class="card shadow">
     <div class="card-body p-3">
       <% point_activity_ids = @point_activity_targets_month.pluck(:point_activity_id) %>
