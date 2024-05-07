@@ -1,34 +1,40 @@
-<nav class="navbar navbar-expand-md shadow-sm">
-  <div class="container w-200">
-    <div class="w-100 d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <%= link_to root_path, data: { turbolinks: false } do %>
-          <%= image_tag "logo.png", class: "img-fluid", width: "180px" %>
-        <% end %>
-        <p class="text-white d-md-block fw-bold fs-2 mb-0">ちいかつマネージャー</p>
+<nav class="navbar navbar-expand-md shadow-sm justify-content-between pt-0 pb-0">
+  <div class="d-flex align-items-center">
+    <%= link_to root_path, data: { turbolinks: false } do %>
+      <%= image_tag "logo.png", class: "img-fluid", width: "180px" %>
+    <% end %>
+    <p class="text-white d-md-block fw-bold fs-2 mb-0">ちいかつマネージャー</p>
+  </div>
+  <div class="text-white align-items-center mr-10">
+    <div class="d-flex align-items-center mr-10">
+        <div class="dropdown">
+          <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ユーザー
+          </button>
+        <div class="dropdown-menu dropdown-menu-end shadow text-center" style="padding: 4px 0px;">
+          <% if user_signed_in? %>
+            <li><%= link_to 'マイページ編集', edit_user_registration_path, class: "dropdown-item text-secondary py-2", data: { turbolinks: false } %></li>
+            <li><%= link_to 'ログアウト', destroy_user_session_path, class: "dropdown-item text-secondary py-2", method: :delete %></li>
+          <% else %>
+            <li><%= link_to 'アカウント登録', new_user_registration_path, class: "dropdown-item text-secondary py-2" %></li>
+            <li><%= link_to 'ログイン', new_user_session_path, class: "dropdown-item text-secondary py-2" %></li>
+          <% end %>
+        </div>
       </div>
-      <div class="d-flex justify-content-end text-white align-items-center">
-          <p class="d-md-block d-none fs-6 pe-2 mt-3">ポイント詳細</p>
-          <div class="dropdown">
-            <a class="dropdown-toggle text-purple" data-bs-toggle="dropdown" href="#"></a>
-            <div class="dropdown-menu dropdown-menu-end shadow text-center" style="padding: 4px 0px;">
-                <li class="dropdown-item text-secondary py-2">目標ポイント設定</li>
-                <li class="dropdown-item text-secondary py-2">獲得ポイント登録</li>
-            </div>
-          </div>
-          <p class="d-md-block d-none fs-6 pe-2 mt-3">ユーザー</p>
-          <div class="dropdown">
-            <a class="dropdown-toggle text-purple" data-bs-toggle="dropdown" href="#"></a>
-            <div class="dropdown-menu dropdown-menu-end shadow text-center" style="padding: 4px 0px;">
-              <% if user_signed_in? %>
-                <li><%= link_to 'マイページ編集', edit_user_registration_path, class: "dropdown-item text-secondary py-2", data: { turbolinks: false } %></li>
-                <li><%= link_to 'ログアウト', destroy_user_session_path, class: "dropdown-item text-secondary py-2", method: :delete %></li>
-              <% else %>
-                <li><%= link_to 'アカウント登録', new_user_registration_path, class: "dropdown-item text-secondary py-2" %></li>
-                <li><%= link_to 'ログイン', new_user_session_path, class: "dropdown-item text-secondary py-2" %></li>
-              <% end %>
-            </div>
-          </div>
+    </div>
+    <div class="d-flex align-items-center mr-10">
+        <div class="dropdown">
+          <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ポイント詳細
+          </button>
+        <div class="dropdown-menu dropdown-menu-end shadow text-center" style="padding: 4px 0px;">
+            <%= link_to new_point_activity_target_path, class: "dropdown-item text-secondary py-2", data: { turbolinks: false } do %>
+              目標ポイント登録
+            <% end %>
+            <%= link_to new_point_activity_get_path, class: "dropdown-item text-secondary py-2", data: { turbolinks: false } do %>
+              獲得ポイント登録
+            <% end %>
+        </div>
       </div>
     </div>
   </div>

@@ -1,0 +1,2 @@
+class PointActivity < ApplicationRecord
+end

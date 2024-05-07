@@ -7,13 +7,13 @@ gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
 gem 'mysql2', '0.5.3'
 gem 'puma', '5.5.2'
 gem 'sass-rails', '6.0.0'
-gem 'webpacker', '5.4.3'
 gem 'turbolinks', '5.2.1'
 gem 'jbuilder', '2.11.5'
 gem 'bootsnap', '1.10.1', require: false
 gem 'net-http'
 gem 'devise', '4.9.3'
 gem 'devise-i18n', '1.12.0'
+gem 'stimulus-rails'
 
 group :development, :test do
   gem 'byebug', '11.1.3'

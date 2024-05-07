@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  get_point: one
+  target_point_title: MyString
+  target_point: 1
+
+two:
+  user: two
+  get_point: two
+  target_point_title: MyString
+  target_point: 1
