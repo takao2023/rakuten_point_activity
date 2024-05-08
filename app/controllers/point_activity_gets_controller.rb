@@ -1,7 +1,9 @@
 class PointActivityGetsController < ApplicationController
+  before_action :set_point_activity_get, only: [:show, :edit, :update, :destroy]
+  
   def index
-    @point_activity_get = PointActivityGet.all
-    @point_activity_target = PointActivityTarget.all
+    @point_activity_gets = PointActivityGet.all
+    @point_activity_targets = PointActivityTarget.all
   end
   
   def new
@@ -21,15 +23,12 @@ class PointActivityGetsController < ApplicationController
   end
 
   def show
-    @point_activity_get = PointActivityGet.find(params[:id])
   end
 
   def edit
-    @point_activity_get = PointActivityGet.find(params[:id])
   end
 
   def update
-    @point_activity_get = PointActivityGet.find(params[:id])
     if @point_activity_get.update(point_activity_get_params)
       redirect_to @point_activity_get, notice: 'Point activity get was successfully updated.'
     else
@@ -38,7 +37,6 @@ class PointActivityGetsController < ApplicationController
   end
 
   def destroy
-    @point_activity_get = PointActivityGet.find(params[:id])
     @point_activity_get.destroy
     redirect_to root_path, notice: 'Point activity get was successfully destroyed.'
   end
@@ -48,5 +46,9 @@ class PointActivityGetsController < ApplicationController
   def point_activity_get_params
     params.require(:point_activity_get).permit(:user_id, :point_activity_id, :get_point)
   end
+
+  def set_point_activity_get
+    @point_activity_get = PointActivityGet.find(params[:id])
+  end 
 
 end

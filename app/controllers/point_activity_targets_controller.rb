@@ -1,8 +1,10 @@
 class PointActivityTargetsController < ApplicationController
+  before_action :set_point_activity_target, only: [:show, :edit, :update, :destroy]
+  
   def index
-    @point_activity_target = PointActivityTarget.all
+    @point_activity_targets = PointActivityTarget.all
     @point_activity_targets_month = PointActivityTarget.where(created_at: Time.zone.today.beginning_of_month..Time.zone.today.end_of_month).group(:point_activity_id).select("point_activity_id, SUM(target_point) as total_target_point")
-    @point_activity_get = PointActivityGet.all
+    @point_activity_gets = PointActivityGet.all
     @point_activities = PointActivity.all
 
     @point_activity_get_today = PointActivityGet.where(created_at: Time.zone.today.beginning_of_day..Time.zone.today.end_of_day)
@@ -27,15 +29,12 @@ class PointActivityTargetsController < ApplicationController
   end
 
   def show
-    @point_activity_target = PointActivityTarget.find(params[:id])
   end
 
   def edit
-    @point_activity_target = PointActivityTarget.find(params[:id])
   end
 
   def update
-    @point_activity_target = PointActivityTarget.find(params[:id])
     if @point_activity_target.update(point_activity_target_params)
       redirect_to root_path, notice: 'Point activity target was successfully updated.'
     else
@@ -44,7 +43,6 @@ class PointActivityTargetsController < ApplicationController
   end
 
   def destroy
-    @point_activity_target = PointActivityTarget.find(params[:id])
     @point_activity_target.destroy
     redirect_to root_path, notice: 'Point activity target was successfully destroyed.'
   end
@@ -55,4 +53,7 @@ class PointActivityTargetsController < ApplicationController
     params.require(:point_activity_target).permit(:user_id, :point_activity_id, :target_point)
   end
 
+  def set_point_activity_target
+    @point_activity_target = PointActivityTarget.find(params[:id])
+  end 
 end

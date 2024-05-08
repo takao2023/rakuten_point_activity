@@ -240,9 +240,9 @@ footer {
 }
 
 .top_body{
-  background-image: url("back2.jpeg");
+  background-image: url("back.jpeg");
   background-position: center;
   background-size: cover;
-  /*background-attachment: fixed;*/
+  background-attachment: fixed;
   opacity: .9;
 }
