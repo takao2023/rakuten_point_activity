@@ -13,7 +13,6 @@ gem 'bootsnap', '1.10.1', require: false
 gem 'net-http'
 gem 'devise', '4.9.3'
 gem 'devise-i18n', '1.12.0'
-gem 'stimulus-rails'
 
 group :development, :test do
   gem 'byebug', '11.1.3'

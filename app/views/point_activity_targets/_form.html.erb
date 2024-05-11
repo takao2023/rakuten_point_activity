@@ -13,12 +13,12 @@
       <%= form_with model: point_activity_target, local: true do |f| %>
         <%= f.hidden_field :user_id, value: current_user.id %>
         <div class="mb-4">
-          <%= f.label :point_activity_id, "ポイかつ名", class: "text-secondary fw-bold mb-2" %>
+          <%= f.label :point_activity_id, "ポイかつ名", class: "text-main fw-bold mb-2" %>
           <span class="p_required">必須</span>
-          <%= f.collection_select :point_activity_id, @point_activities, :id, :point_activity_title, class: "text-secondary fw-bold" %>
+          <%= f.collection_select :point_activity_id, @point_activities, :id, :point_activity_title, class: "text-main fw-bold" %>
         </div>
         <div class="mb-4">
-          <%= f.label :target_point, "目標のポイント数", class: "text-secondary fw-bold mb-2" %>
+          <%= f.label :target_point, "目標のポイント数", class: "text-main fw-bold mb-2" %>
           <span class="p_required">必須</span>
           <%= f.text_field :target_point, class: "form-control shadow-sm py-md-3" %>
         </div>
