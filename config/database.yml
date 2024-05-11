@@ -53,3 +53,9 @@ production:
   database: rakuten_point_activity_production
   username: rakuten_point_activity
   password: <%= ENV['RAKUTEN_POINT_ACTIVITY_DATABASE_PASSWORD'] %>
+
+production:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  url: <%= ENV['DATABASE_URL'] %>
