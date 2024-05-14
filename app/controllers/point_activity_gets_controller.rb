@@ -1,5 +1,7 @@
 class PointActivityGetsController < ApplicationController
   before_action :set_point_activity_get, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :redirect_unless_creator, only: [:edit, :update, :destroy]
   
   def index
     @point_activity_gets = PointActivityGet.all
@@ -50,5 +52,8 @@ class PointActivityGetsController < ApplicationController
   def set_point_activity_get
     @point_activity_get = PointActivityGet.find(params[:id])
   end 
-
+  
+  def redirect_unless_creator
+    redirect_to root_path unless @point_activity_get.user == current_user
+  end
 end

@@ -4,6 +4,7 @@
       <p>すきま時間でちいさなポイかつ！</p>
       <p>ゆる〜く始めてチリツモな成果を上げよう</p>
     </div>
+    <% if user_signed_in? %>
     <div class="col-md-4 mt-5">
       <%= render "sidebar_get"%>
     </div>
@@ -19,5 +20,16 @@
     <div class="col-md-4 mt-5">
       <%= render "sidebar_target"%>
     </div>
+    <% else %>
+    <div class="mt-5 align-items-center">
+      <p class="text-main text-center fw-bold fs-5">ポイかつ便利アイテム</p>
+      <div class="mb-2">
+        <%= render partial: "clocks/time.html.erb"%>
+        <%= render partial: "countdown_timers/countdown.html.erb"%>
+        <%= render partial: "countdown_timers/countdown2.html.erb"%>
+        
+      </div>
+    </div>
+    <% end %>
   </div>
 </div>
