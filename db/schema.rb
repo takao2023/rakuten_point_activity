@@ -10,7 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_13_070012) do
+ActiveRecord::Schema.define(version: 2024_05_03_115204) do
+
+  create_table "countdowns", charset: "utf8mb4", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "missions", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "user_id"
+    t.text "content"
+    t.string "penalty"
+    t.datetime "deadline"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "point_activities", charset: "utf8mb4", force: :cascade do |t|
+    t.string "point_activity_title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "point_activity_gets", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "point_activity_id", null: false
+    t.integer "get_point"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["point_activity_id"], name: "index_point_activity_gets_on_point_activity_id"
+  end
+
+  create_table "point_activity_targets", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "point_activity_id", null: false
+    t.integer "target_point"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["point_activity_id"], name: "index_point_activity_targets_on_point_activity_id"
+  end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -24,4 +62,6 @@ ActiveRecord::Schema.define(version: 2024_04_13_070012) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "point_activity_gets", "point_activities"
+  add_foreign_key "point_activity_targets", "point_activities"
 end

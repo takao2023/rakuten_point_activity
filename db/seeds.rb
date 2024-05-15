@@ -1,7 +1,20 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+activities = [
+  "ポコポコもぐらたたき",
+  "スロットパラダイス",
+  "幻の海底神殿",
+  "ぷくぷくラグーン",
+  "賢者の難問クイズ",
+  "モールくじ ガチャ",
+  "モールくじ スクラッチ",
+  "モールくじ じゃんけん",
+  "ドリームくじ",
+  "Rakutenチャンネル",
+  "楽天PointClub",
+  "R Point Screen",
+  "R Link ミッション",
+  "R Link ラッキーくじ"
+]
+
+activities.each do |activity_title|
+  PointActivity.create!(point_activity_title: activity_title)
+end

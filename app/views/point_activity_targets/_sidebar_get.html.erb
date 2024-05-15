@@ -1,0 +1,56 @@
+<% if current_user %>
+  <div class="mb-2" style="padding: 4px;">
+    <p class="text-main fw-bold fs-5">今日の獲得ポイント</p>
+    <div class="card shadow">
+      <div class="card-body p-3">
+        <% total_points_today = @point_activity_get_today.sum(&:get_point) %>
+        <% @point_activity_get_today.where(user_id: current_user.id).each do |getpoint| %>
+          <% point_activity = PointActivity.find_by(id: getpoint.point_activity_id) %>
+          <dl class="dl-horizontal">
+            <dt><%= point_activity.point_activity_title %></dt>
+            <dd>
+              <% percentage = total_points_today.zero? ? 0 : (getpoint.get_point.to_f / total_points_today) * 100 %>
+              <div class="progress">
+                <div class="progress-bar bg-success" style="width: <%= percentage %>%;">
+                  <%= getpoint.get_point %>
+                </div>
+              </div>
+            </dd>
+          </dl>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if current_user %>
+  <div class="mb-2" style="padding: 4px;">
+    <p class="text-main fw-bold fs-5">今週の獲得ポイント</p>
+    <div class="card shadow">
+      <div class="card-body p-3">
+        <% @point_activity_get_this_week.where(user_id: current_user.id).each do |getpoint| %>
+          <% point_activity = PointActivity.find_by(id: getpoint.point_activity_id) %>
+          <div class="d-flex align-items-center border-bottom py-1">
+            <p class="card-text fw-bold fs-5"><%= point_activity.point_activity_title %>：<%= getpoint.total_get_point %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if current_user %>
+  <div class="mb-2" style="padding: 4px;">
+    <p class="text-main fw-bold fs-5">今月の獲得ポイント</p>
+    <div class="card shadow">
+      <div class="card-body p-3">
+        <% @point_activity_get_this_month.where(user_id: current_user.id).each do |getpoint| %>
+          <% point_activity = PointActivity.find_by(id: getpoint.point_activity_id) %>
+          <div class="d-flex align-items-center border-bottom py-1">
+            <p class="card-text fw-bold fs-5"><%= point_activity.point_activity_title %>：<%= getpoint.total_get_point %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

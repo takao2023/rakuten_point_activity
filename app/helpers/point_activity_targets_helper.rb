@@ -1,0 +1,2 @@
+module PointActivityTargetsHelper
+end

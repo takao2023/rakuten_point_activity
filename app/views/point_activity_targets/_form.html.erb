@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="text-center my-4">
+    <span class="text-main fs-2 ms-2">目標ポイント</span>
+  </div>
+
+  <div class="row justify-content-center">
+    <% if flash[:alert] %>
+        <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+        </div>
+    <% end %>
+    <div class="col-10 col-md-6">
+      <%= form_with model: point_activity_target, local: true do |f| %>
+        <%= f.hidden_field :user_id, value: current_user.id %>
+        <div class="mb-4">
+          <%= f.label :point_activity_id, "ポイかつ名", class: "text-main fw-bold mb-2" %>
+          <span class="p_required">必須</span>
+          <%= f.collection_select :point_activity_id, @point_activities, :id, :point_activity_title, class: "text-main fw-bold" %>
+        </div>
+        <div class="mb-4">
+          <%= f.label :target_point, "目標のポイント数", class: "text-main fw-bold mb-2" %>
+          <span class="p_required">必須</span>
+          <%= f.text_field :target_point, class: "form-control shadow-sm py-md-3" %>
+        </div>
+        <div class="text-center">
+          <%= f.submit "送信する", class: "btn btn-purple shadow-sm fw-bold mt-4 px-5 py-3" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
