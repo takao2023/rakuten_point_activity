@@ -156,8 +156,6 @@ tab {
 .indicators-style {
   border-radius: 50px;
   margin: 1px 3px;
-  height: $carousel-indicator-length;
-  max-width: $carousel-indicator-length;
 }
 
 .p-hover {
@@ -244,18 +242,18 @@ footer {
   background-size: cover;
   background-attachment: fixed;
   opacity: .9;
-  /*animation: image_anime 480s ease infinite; /* 480秒のアニメーションを繰り返す */
-  background-image: url("back2.jpeg");
+  animation: image_anime 480s ease infinite; /* 480秒のアニメーションを繰り返す */
+  /*background-image: url("back2.jpeg");*/
 }
 
-/*@keyframes image_anime {*/
-/*  0% {*/
-/*    background-image: url("back2.jpeg");*/
-/*  }*/
-/*  50% {*/
-/*    background-image: url("back.jpeg");*/
-/*  }*/
-/*  100% {*/
-/*    background-image: url("back2.jpeg");*/
-/*  }*/
-/*}*/
+@keyframes image_anime {
+  0% {
+    background-image: url("back2.jpeg");
+  }
+  50% {
+    background-image: url("back.jpeg");
+  }
+  100% {
+    background-image: url("back2.jpeg");
+  }
+}
