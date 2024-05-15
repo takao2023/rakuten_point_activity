@@ -6,7 +6,6 @@
         <% total_points_today = @point_activity_get_today.sum(&:get_point) %>
         <% @point_activity_get_today.where(user_id: current_user.id).each do |getpoint| %>
           <% point_activity = PointActivity.find_by(id: getpoint.point_activity_id) %>
-
           <dl class="dl-horizontal">
             <dt><%= point_activity.point_activity_title %></dt>
             <dd>

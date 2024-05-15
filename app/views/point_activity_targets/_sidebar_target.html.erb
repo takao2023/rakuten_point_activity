@@ -31,8 +31,16 @@
         <div class="card-body p-3">
           <% current_user.point_activity_targets.group_by { |pat| pat.point_activity_id }.each do |point_activity_id, targets| %>
             <% point_activity = PointActivity.find(point_activity_id) %>
-            <div class="d-flex align-items-center border-bottom py-1">
-              <p class="card-text fw-bold fs-5"><%= point_activity.point_activity_title %></p>
+            <div class="d-flex align-items-center justify-content-between border-bottom py-1">
+              <p class="card-text fw-bold fs-5 mb-0"><%= point_activity.point_activity_title %></p>
+              <div class="d-flex align-items-center justify-content-between">
+                <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  +1
+                </button>
+                <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  +5
+                </button>
+              </div>
             </div>
           <% end %>
         </div>
@@ -40,7 +48,6 @@
     </div>
   <% end %>
 <% end %>
-
 
 <div class="mb-2" style="padding: 4px;">
   <p class="text-main fw-bold fs-5">おすすめのポイかつ</p>
