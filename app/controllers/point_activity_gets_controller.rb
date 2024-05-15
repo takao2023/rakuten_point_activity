@@ -4,8 +4,8 @@ class PointActivityGetsController < ApplicationController
   before_action :redirect_unless_creator, only: [:edit, :update, :destroy]
   
   def index
-    @point_activity_gets = PointActivityGet.all
-    @point_activity_targets = PointActivityTarget.all
+    @point_activity_gets = current_user.point_activity_gets
+    @point_activity_targets = current_user.point_activity_targets
   end
   
   def new

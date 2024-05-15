@@ -240,9 +240,22 @@ footer {
 }
 
 .top_body{
-  background-image: url("back2.jpeg");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
   opacity: .9;
+  animation: image_anime 480s ease infinite; /* 480秒のアニメーションを繰り返す */
+  /*background-image: url("back.jpeg"),url("back2.jpeg");*/
+}
+
+@keyframes image_anime {
+  0% {
+    background-image: url("back2.jpeg"); /* 背景画像2を指定 */
+  }
+  50% {
+    background-image: url("back.jpeg"); /* 背景画像1を指定 */
+  }
+  100% {
+    background-image: url("back2.jpeg"); /* 背景画像2を指定 */
+  }
 }

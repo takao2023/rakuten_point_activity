@@ -4,10 +4,6 @@ class PointActivityTargetsController < ApplicationController
   before_action :redirect_unless_creator, only: [:edit, :update, :destroy]
   
   def index
-    @point_activity_targets = PointActivityTarget.all
-    @point_activity_gets = PointActivityGet.all
-    @point_activities = PointActivity.all
-
     @point_activity_get_today = PointActivityGet.where(created_at: Time.zone.today.beginning_of_day..Time.zone.today.end_of_day)
     @point_activity_get_this_week = PointActivityGet.where(created_at: Time.zone.today.beginning_of_week..Time.zone.today.end_of_week).group(:point_activity_id).select("point_activity_id, SUM(get_point) as total_get_point")
     if current_user
