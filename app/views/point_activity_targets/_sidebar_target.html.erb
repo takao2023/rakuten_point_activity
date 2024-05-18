@@ -34,12 +34,18 @@
             <div class="d-flex align-items-center justify-content-between border-bottom py-1">
               <p class="card-text fw-bold fs-5 mb-0"><%= point_activity.point_activity_title %></p>
               <div class="d-flex align-items-center justify-content-between">
-                <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  +1
-                </button>
-                <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  +5
-                </button>
+                <%= form_with url: point_activity_gets_path, method: :post, local: true do |f| %>
+                  <%= hidden_field_tag 'point_activity_get[point_activity_id]', point_activity.id %>
+                  <%= hidden_field_tag 'point_activity_get[user_id]', current_user.id %>
+                  <%= hidden_field_tag 'point_activity_get[get_point]', 1 %>
+                  <%= f.submit '+1', class: 'btn btn-secondary mx-1' %>
+                <% end %>
+                <%= form_with url: point_activity_gets_path, method: :post, local: true do |f| %>
+                  <%= hidden_field_tag 'point_activity_get[point_activity_id]', point_activity.id %>
+                  <%= hidden_field_tag 'point_activity_get[user_id]', current_user.id %>
+                  <%= hidden_field_tag 'point_activity_get[get_point]', 5 %>
+                  <%= f.submit '+5', class: 'btn btn-secondary mx-1' %>
+                <% end %>
               </div>
             </div>
           <% end %>

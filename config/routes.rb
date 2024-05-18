@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   devise_for :users
   
   resources :point_activity_targets
-  resources :point_activity_gets
+  resources :point_activity_gets, except: [:show]
   
 end
