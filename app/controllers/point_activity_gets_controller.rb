@@ -17,36 +17,34 @@ class PointActivityGetsController < ApplicationController
     @point_activities = PointActivity.all
     @point_activity_get = PointActivityGet.new(point_activity_get_params)
     if @point_activity_get.save
-      redirect_to root_path, notice: 'Point activity target was successfully created.'
+      redirect_to root_path, notice: 'ポイントが追加されました。'
     else
-      flash.now[:alert] = @point_activity_get.errors.full_messages.join(', ')
-      render :new
+      redirect_to root_path, alert: 'ポイントの追加に失敗しました。'
     end
   end
 
-  def show
-  end
-
   def edit
+    @point_activities = PointActivity.all
   end
 
   def update
     if @point_activity_get.update(point_activity_get_params)
-      redirect_to @point_activity_get, notice: 'Point activity get was successfully updated.'
+      redirect_to root_path, notice: 'ポイントが更新されました。'
     else
+      @point_activities = PointActivity.all
       render :edit
     end
   end
-
+  
   def destroy
     @point_activity_get.destroy
-    redirect_to root_path, notice: 'Point activity get was successfully destroyed.'
+    redirect_to root_path, notice: 'ポイントが削除されました。'
   end
 
   private
 
   def point_activity_get_params
-    params.require(:point_activity_get).permit(:user_id, :point_activity_id, :get_point)
+    params.require(:point_activity_get).permit(:point_activity_id, :user_id, :get_point)
   end
 
   def set_point_activity_get

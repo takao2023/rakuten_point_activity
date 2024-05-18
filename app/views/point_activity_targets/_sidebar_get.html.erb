@@ -7,7 +7,13 @@
         <% @point_activity_get_today.where(user_id: current_user.id).each do |getpoint| %>
           <% point_activity = PointActivity.find_by(id: getpoint.point_activity_id) %>
           <dl class="dl-horizontal">
-            <dt><%= point_activity.point_activity_title %></dt>
+            <dt class="d-flex align-items-center justify-content-between">
+              <p class="mb-0"><%= point_activity.point_activity_title %></p>
+              <div>
+                <%= link_to '編集', edit_point_activity_get_path(getpoint), class: 'btn btn-secondary' %>
+                <%= link_to "削除", point_activity_get_path(getpoint), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+              </div>
+            </dt>
             <dd>
               <% percentage = total_points_today.zero? ? 0 : (getpoint.get_point.to_f / total_points_today) * 100 %>
               <div class="progress">
