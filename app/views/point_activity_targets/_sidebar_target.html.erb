@@ -1,29 +1,29 @@
 <% if current_user %>
   <div class="mb-2" style="padding: 4px;">
     <p class="text-main fw-bold fs-5">今月の目標　達成度</p>
-    <div class="square align-middle">
-      <% total_points_month = @point_activity_targets_month.sum(&:total_target_point) %>
-      <% total_get_points_month = @point_activity_get_this_month.sum(&:total_get_point) %>
-      <% remaining_points = total_points_month - total_get_points_month %>
-      
-      <p class="text-secondary fw-bold fs-5">今月の目標ポイント</p>
-      <p class="fw-bold fs-1"><%= total_points_month %></p>
-      <p class="text-secondary fw-bold fs-5">目標ポイントまで残り</p>
-      <% if remaining_points <= 0 && total_points_month != 0 %>
-        <p class="fw-bold fs-1 text-info">目標達成！！</p>
-      <% else %>
-        <p class="fw-bold fs-1"><%= remaining_points %></p>
-      <% end %>
-      <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: <%= (total_get_points_month.to_f / total_points_month * 100).round(2) %>%;">
-          <%= total_get_points_month %>
+    <div class="card align-middle">
+      <div class="card-body p-3">
+        <% total_points_month = @point_activity_targets_month.sum(&:total_target_point) %>
+        <% total_get_points_month = @point_activity_get_this_month.sum(&:total_get_point) %>
+        <% remaining_points = total_points_month - total_get_points_month %>
+  
+        <p class="text-secondary fw-bold fs-5">今月の目標ポイント</p>
+        <p class="fw-bold fs-1 text-center"><%= total_points_month %></p>
+        <p class="text-secondary fw-bold fs-5">目標ポイントまで残り</p>
+        <% if remaining_points <= 0 && total_points_month != 0 %>
+          <p class="fw-bold fs-1 text-info text-center">目標達成！！</p>
+        <% else %>
+          <p class="fw-bold fs-1 text-center"><%= remaining_points %></p>
+        <% end %>
+        <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: <%= total_points_month.zero? ? 0 : (total_get_points_month.to_f / total_points_month * 100).round(2) %>%;">
+            <%= total_get_points_month %>
+          </div>
         </div>
       </div>
     </div>
   </div>
-<% end %>
 
-<% if current_user %>
   <% if current_user.point_activity_targets.any? %>
     <div class="mb-2" style="padding: 4px;">
       <p class="text-main fw-bold fs-5">設定しているポイかつ</p>
@@ -53,26 +53,27 @@
       </div>
     </div>
   <% end %>
-<% end %>
 
-<div class="mb-2" style="padding: 4px;">
-  <p class="text-main fw-bold fs-5">おすすめのポイかつ</p>
-  <div class="card shadow">
-    <div class="card-body p-3">
-      <% user_point_activity_ids = current_user.point_activity_targets.pluck(:point_activity_id) %>
-      <% available_activities = PointActivity.where.not(id: user_point_activity_ids) %>
-      <% if available_activities.count >= 5 %>
-        <% recommended_activities = available_activities.order(Arel.sql('RANDOM()')).limit(5) %>
-      <% else %>
-        <% extra_activities_count = 5 - available_activities.count %>
-        <% extra_activities = PointActivity.where.not(id: user_point_activity_ids).where.not(id: recommended_activities.pluck(:id)).order(Arel.sql('RANDOM()')).limit(extra_activities_count) %>
-        <% recommended_activities = available_activities + extra_activities %>
-      <% end %>
-      <% recommended_activities.each do |activity| %>
-        <div class="d-flex align-items-center border-bottom py-1">
-          <p class="card-text fw-bold fs-5"><%= activity.point_activity_title %></p>
-        </div>
-      <% end %>
+  <div class="mb-2" style="padding: 4px;">
+    <p class="text-main fw-bold fs-5">おすすめのポイかつ</p>
+    <div class="card shadow">
+      <div class="card-body p-3">
+        <% user_point_activity_ids = current_user.point_activity_targets.pluck(:point_activity_id) %>
+        <% available_activities = PointActivity.where.not(id: user_point_activity_ids) %>
+        <% if available_activities.count >= 5 %>
+          <% recommended_activities = available_activities.order(Arel.sql('RANDOM()')).limit(5) %>
+        <% else %>
+          <% recommended_activities = available_activities %>
+          <% extra_activities_count = 5 - available_activities.count %>
+          <% extra_activities = PointActivity.where.not(id: user_point_activity_ids).where.not(id: recommended_activities.pluck(:id)).order(Arel.sql('RANDOM()')).limit(extra_activities_count) %>
+          <% recommended_activities = recommended_activities + extra_activities %>
+        <% end %>
+        <% recommended_activities.each do |activity| %>
+          <div class="d-flex align-items-center border-bottom py-1">
+            <p class="card-text fw-bold fs-5"><%= activity.point_activity_title %></p>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
