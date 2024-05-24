@@ -61,11 +61,11 @@
         <% user_point_activity_ids = current_user.point_activity_targets.pluck(:point_activity_id) %>
         <% available_activities = PointActivity.where.not(id: user_point_activity_ids) %>
         <% if available_activities.count >= 5 %>
-          <% recommended_activities = available_activities.order(Arel.sql('RAND()')).limit(5) %>
+          <% recommended_activities = available_activities.order(Arel.sql('RANDOM()')).limit(5) %>
         <% else %>
           <% recommended_activities = available_activities %>
           <% extra_activities_count = 5 - available_activities.count %>
-          <% extra_activities = PointActivity.where.not(id: user_point_activity_ids).where.not(id: recommended_activities.pluck(:id)).order(Arel.sql('RAND()')).limit(extra_activities_count) %>
+          <% extra_activities = PointActivity.where.not(id: user_point_activity_ids).where.not(id: recommended_activities.pluck(:id)).order(Arel.sql('RANDOM()')).limit(extra_activities_count) %>
           <% recommended_activities = recommended_activities + extra_activities %>
         <% end %>
         <% recommended_activities.each do |activity| %>
