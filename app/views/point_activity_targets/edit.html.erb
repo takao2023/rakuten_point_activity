@@ -1,1 +1,43 @@
-<%= render "form", point_activity_target: @point_activity_target, action_text: "編集" %>
+<div class="container-fluid mb-5 pb-5 mt-4">
+  <!-- ヘッダーカード -->
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
+    <div class="d-flex align-items-center mb-1">
+      <%= link_to point_activity_targets_path, class: "btn btn-link text-secondary p-0 me-3" do %>
+        <i class="bi bi-chevron-left fs-4"></i>
+      <% end %>
+      <h2 class="h5 mb-0">🎯 目標を編集</h2>
+    </div>
+    <p class="text-secondary small mb-0 mt-2">設定中の目標ポイントを調整します</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 animate-entrance" style="animation-delay: 0.2s;">
+      <div class="glass-card">
+        <%= form_with(model: @point_activity_target, local: true) do |f| %>
+          <div class="mb-4 d-flex align-items-center">
+            <div class="activity-icon me-3">
+              <i class="bi bi-stars text-primary fs-4"></i>
+            </div>
+            <div class="overflow-hidden">
+              <h3 class="h6 font-weight-bold mb-0 text-truncate"><%= @point_activity_target.point_activity.point_activity_title %></h3>
+              <p class="extra-small text-secondary mb-0">この案件の目標値を変更します</p>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :target_point, "新しい目標ポイント", class: "small text-secondary mb-2 d-block" %>
+            <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
+              <%= f.number_field :target_point, class: "form-control border-0 bg-white px-4 fw-bold text-gradient", min: 1 %>
+              <span class="input-group-text border-0 bg-white text-secondary pe-4">pt</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3">
+            <%= f.submit "変更を保存する", class: "btn btn-vibrant w-100 rounded-pill py-3 fw-bold shadow-sm" %>
+            <%= link_to "キャンセル", point_activity_targets_path, class: "btn btn-link text-secondary w-100 mt-2 small text-decoration-none" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

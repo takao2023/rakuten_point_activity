@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "bulk_form_#{service.id}" do %>
+  <%= link_to bulk_new_point_activity_gets_path(service_id: service.id), 
+              class: "btn btn-vibrant btn-sm rounded-pill py-1 px-2 shadow-sm border-0 d-flex align-items-center gap-1",
+              title: "一括獲得" do %>
+    <i class="bi bi-plus-lg" style="font-size: 0.8rem;"></i>
+    <span style="font-size: 0.7rem;" class="fw-bold">一括</span>
+  <% end %>
+<% end %>

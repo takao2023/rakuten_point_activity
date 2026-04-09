@@ -1,35 +1,51 @@
-<div class="container">
-  <div class="row justify-content-between">
-    <div class="text-main text-center fs-1 ms-2 mt-8">
-      <p>すきま時間でちいさなポイかつ！</p>
-      <p>ゆる〜く始めてチリツモな成果を上げよう</p>
-    </div>
-    <% if user_signed_in? %>
-    <div class="col-md-4 mt-5">
-      <%= render "sidebar_get"%>
-    </div>
-    <div class="col-md-3 mt-5">
-      <div class="mb-2" style="padding: 4px;">
-        <p class="text-main text-center fw-bold fs-5">ポイかつ便利アイテム</p>
-        <%= render partial: "clocks/time.html.erb"%>
-        <%= render partial: "countdown_timers/countdown.html.erb"%>
-        <%= render partial: "countdown_timers/countdown2.html.erb"%>
-        
-      </div>
-    </div>
-    <div class="col-md-4 mt-5">
-      <%= render "sidebar_target"%>
-    </div>
-    <% else %>
-    <div class="mt-5 align-items-center">
-      <p class="text-main text-center fw-bold fs-5">ポイかつ便利アイテム</p>
-      <div class="mb-2">
-        <%= render partial: "clocks/time.html.erb"%>
-        <%= render partial: "countdown_timers/countdown.html.erb"%>
-        <%= render partial: "countdown_timers/countdown2.html.erb"%>
-        
-      </div>
-    </div>
-    <% end %>
+<div class="container py-4">
+  <div class="d-flex justify-content-end mb-4 text-end">
+    <%= link_to "ポイ活の詳細を確認する", new_point_activity_target_path, class: "btn btn-vibrant" %>
   </div>
+
+  <% if @ai_report.present? %>
+    <div class="glass-card mb-5 border-0 shadow-sm animate-entrance" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%); border-radius: 20px;">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="icon-box bg-white bg-opacity-50 me-3 shadow-sm" style="width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-robot text-primary fs-5"></i>
+          </div>
+          <div>
+            <h4 class="h6 fw-bold mb-1 text-dark">Gemini からの戦略レポート</h4>
+            <div class="extra-small text-secondary opacity-75"><%= @ai_report.generated_at.strftime("%Y/%m/%d") %> 更新</div>
+          </div>
+        </div>
+        <p class="small text-secondary mb-0" style="line-height: 1.7; letter-spacing: 0.02em;">
+          <%= @ai_report.content %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+
+  <% 
+    icon_map = {
+      "広告タップ" => "bi-megaphone",
+      "ゲームクリア" => "bi-controller",
+      "ミッションクリア" => "bi-check2-circle",
+      "毎日くじ" => "bi-stars",
+      "ながら" => "bi-headphones",
+      "その他" => "bi-three-dots"
+    }
+  %>
+
+  <% @point_activities.each do |category, activities| %>
+    <div class="category-section mb-5">
+      <h3 class="h5 fw-bold mb-3 d-flex align-items-center opacity-75">
+        <i class="bi <%= icon_map[category] || 'bi-bookmark-star' %> me-2 text-primary"></i>
+        <%= category %>
+      </h3>
+      <div class="row g-3">
+        <% activities.each do |pa| %>
+          <div class="col-12 col-md-6">
+            <%= render "activity_card", pa: pa %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

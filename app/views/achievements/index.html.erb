@@ -1,0 +1,127 @@
+<div class="container-fluid mb-5 pb-5 mt-4">
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
+    <h2 class="h5 mb-1 fw-bold"><i class="bi bi-trophy-fill text-warning me-2"></i>実績コレクション</h2>
+    <p class="text-secondary small mb-0 mt-1">
+      集めたバッジの数: <span class="fw-bold text-primary"><%= @earned_achievement_ids.count %></span> / <%= @achievements.count %>
+    </p>
+    
+    <div class="progress mt-3 rounded-pill bg-light" style="height: 10px;">
+      <% progress = @achievements.any? ? (@earned_achievement_ids.count.to_f / @achievements.count * 100) : 0 %>
+      <div class="progress-bar bg-vibrant rounded-pill" style="width: <%= progress %>%"></div>
+    </div>
+  </div>
+
+  <div class="row g-3 justify-content-start">
+    <% @achievements.each_with_index do |achievement, index| %>
+      <% is_earned = @earned_achievement_ids.include?(achievement.id) %>
+      
+      <div class="col-6 col-md-3 col-lg-2 animate-entrance" style="animation-delay: <%= (index / 10.0) + 0.2 %>s;">
+        <div class="achievement-badge-card <%= is_earned ? 'earned' : 'locked' %>" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="<%= is_earned ? achievement.description : '未獲得の実績です' %>">
+          
+          <div class="badge-icon-wrapper mb-2">
+            <div class="badge-inner shadow-sm">
+              <%= is_earned ? achievement.icon : '🔒' %>
+              <% if is_earned %>
+                <div class="earned-sparkle"></div>
+              <% end %>
+            </div>
+          </div>
+
+          <h3 class="achievement-name"><%= achievement.name %></h3>
+          <% if is_earned %>
+            <p class="achievement-desc-mini"><%= achievement.description %></p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .achievement-badge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    height: 100%;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+  }
+  .achievement-badge-card.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+  }
+  .achievement-badge-card:hover {
+    transform: translateY(-8px);
+  }
+  .badge-icon-wrapper {
+    position: relative;
+    width: 72px;
+    height: 72px;
+  }
+  .badge-inner {
+    width: 100%;
+    height: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    transition: all 0.3s ease;
+  }
+  .achievement-badge-card.earned .badge-inner {
+    background: white;
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  .achievement-badge-card.earned:hover .badge-inner {
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2) !important;
+    transform: rotate(5deg) scale(1.1);
+  }
+  .achievement-name {
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    text-align: center;
+    color: var(--text-primary);
+  }
+  .achievement-badge-card.locked .achievement-name {
+    color: var(--text-secondary);
+    opacity: 0.6;
+  }
+  .achievement-desc-mini {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    line-height: 1.2;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .earned-sparkle::before {
+    content: "✨";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 1rem;
+    animation: float 2s infinite ease-in-out;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .bg-vibrant {
+    background: var(--accent-gradient);
+  }
+</style>
+
+

@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.5'
+ruby '3.3.6'
+gem 'logger'
 
-gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
-gem 'mysql2', '0.5.3'
+gem 'rails', '~> 7.1.0'
+gem 'mysql2', '~> 0.5.3'
 gem 'puma', '5.5.2'
 gem 'sass-rails', '6.0.0'
 gem 'turbolinks', '5.2.1'
@@ -15,6 +16,9 @@ gem 'devise', '4.9.3'
 gem 'devise-i18n', '1.12.0'
 gem 'kaminari'
 gem 'bootstrap5-kaminari-views'
+gem 'importmap-rails'
+gem 'turbo-rails'
+gem 'stimulus-rails'
 
 group :development, :test do
   gem 'byebug', '11.1.3'
@@ -38,5 +42,17 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :production do
-  gem 'pg', '1.2.3'
 end
+
+# === 外部 API 連携 & ツール ===
+gem 'line-bot-api'
+gem 'omniauth-line'
+gem 'omniauth-rails_csrf_protection'
+gem 'gemini-ai'
+gem 'chartkick'
+gem 'groupdate'
+
+# === バックグラウンドジョブ & 通知 ===
+gem 'redis', '~> 5.0'
+gem 'sidekiq', '~> 7.0'
+gem 'sidekiq-scheduler'

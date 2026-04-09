@@ -1,0 +1,15 @@
+<%= turbo_frame_tag frame_id || "get_form_#{point_activity_get.point_activity_id}" do %>
+  <%= form_with(model: point_activity_get, class: "d-flex align-items-center gap-1 mt-1 animate-entrance") do |f| %>
+    <%= f.hidden_field :point_activity_id %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    
+    <div class="input-group input-group-sm" style="max-width: 120px;">
+      <%= f.number_field :get_point, value: 1, class: "form-control fw-bold text-center", style: "border-radius: 20px 0 0 20px; border: none; background: rgba(255,255,255,0.9);" %>
+      <span class="input-group-text bg-white border-0 small">pt</span>
+    </div>
+    
+    <%= f.submit "保存", class: "btn btn-vibrant btn-sm fw-bold px-3 shadow-sm", style: "border-radius: 0 20px 20px 0;" %>
+    
+    <%= link_to "×", "#", class: "btn btn-link text-white-50 text-decoration-none p-0 ms-1 ms-md-2", data: { turbo_frame: "_self" } %>
+  <% end %>
+<% end %>

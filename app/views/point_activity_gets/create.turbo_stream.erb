@@ -1,0 +1,68 @@
+<%= turbo_stream.replace "progress_text" do %>
+  <span class="small font-weight-bold text-gradient" id="progress_text"><%= @target_points > 0 ? ((@today_points.to_f / @target_points) * 100).round : 0 %>%</span>
+<% end %>
+
+<%= turbo_stream.replace "progress_bar" do %>
+  <div id="progress_bar" class="progress-bar bg-success rounded-pill" role="progressbar" style="width: <%= @target_points > 0 ? ((@today_points.to_f / @target_points) * 100).round : 0 %>%" aria-valuenow="<%= @today_points %>" aria-valuemin="0" aria-valuemax="<%= @target_points %>"></div>
+<% end %>
+
+<%= turbo_stream.replace "monthly_achievement_card" do %>
+  <div class="glass-card" id="monthly_achievement_card">
+    <h3 class="h6 font-weight-bold mb-3"><i class="bi bi-graph-up-arrow text-primary me-2"></i>今月の達成度</h3>
+    <div style="height: 200px;">
+      <%= pie_chart @achievement_chart_data, 
+            donut: true, 
+            colors: ["#10b981", "#e2e8f0"], 
+            legend: false,
+            library: { 
+              cutout: "80%",
+              plugins: {
+                tooltip: { enabled: false }
+              }
+            } %>
+      <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        <p class="h3 font-weight-bold mb-0 text-gradient" id="achievement_percentage"><%= @target_points > 0 ? ((@month_points.to_f / @target_points) * 100).round : 0 %>%</p>
+        <p class="small text-secondary mb-0"><%= @month_points %> / <%= @target_points %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= turbo_stream.replace "streak_count" do %>
+  <span class="display-5 font-weight-bold text-gradient" id="streak_count"><%= @user_streak.current_streak %></span>
+<% end %>
+
+<%= turbo_stream.replace dom_id(@card_service) do %>
+  <%= render "point_activity_targets/activity_card", pa: @card_service %>
+<% end %>
+
+<% if @point_activity_get.present? %>
+  <%= turbo_stream.replace dom_id(@point_activity_get.point_activity, :task) do %>
+    <div class="col-8 col-md-4" id="<%= dom_id(@point_activity_get.point_activity, :task) %>">
+      <div class="glass-card h-100 d-flex flex-column justify-content-center align-items-center text-center opacity-75">
+        <div class="mb-2">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+        </div>
+        <h4 class="h6 font-weight-bold text-secondary mb-1"><%= @point_activity_get.point_activity.point_activity_title %></h4>
+        <p class="small text-success font-weight-bold mb-0">完了！</p>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @new_achievements.any? %>
+  <%= turbo_stream.prepend "achievement_notifications" do %>
+    <% @new_achievements.each do |achievement| %>
+      <div class="glass-card bg-vibrant text-white mb-3 animate-entrance" style="background: var(--accent-gradient);">
+        <div class="d-flex align-items-center">
+          <div class="me-3 display-6"><%= achievement.icon %></div>
+          <div>
+            <h4 class="h6 font-weight-bold mb-0">実績獲得！</h4>
+            <p class="small mb-0 font-weight-bold"><%= achievement.name %></p>
+            <p class="extra-small mb-0 opacity-75"><%= achievement.description %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

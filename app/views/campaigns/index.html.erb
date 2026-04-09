@@ -1,0 +1,160 @@
+<div class="container-fluid mb-5 pb-5 mt-4">
+  <!-- 🗓 簡易マンスリーカレンダー -->
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h6 fw-bold mb-0 text-primary">
+        <i class="bi bi-calendar-check-fill me-2"></i>楽天キャンペーンカレンダー
+        <span class="text-secondary ms-2 fw-normal" style="font-size: 0.85rem;"><%= @today.strftime("%Y年 %-m月") %></span>
+      </h2>
+    </div>
+    
+    <div class="calendar-grid">
+      <div class="calendar-day-head">月</div>
+      <div class="calendar-day-head">火</div>
+      <div class="calendar-day-head">水</div>
+      <div class="calendar-day-head">木</div>
+      <div class="calendar-day-head">金</div>
+      <div class="calendar-day-head text-primary">土</div>
+      <div class="calendar-day-head text-danger">日</div>
+      
+      <% # 月の最初の日の曜日まで空のセルを入れる (月曜始まり: 1=Mon...7=Sun) %>
+      <% start_padding = (@current_month_days.first.cwday - 1) %>
+      <% start_padding.times do %>
+        <div class="calendar-day-cell empty"></div>
+      <% end %>
+
+      <% @current_month_days.each do |date| %>
+        <div class="calendar-day-cell <%= 'today' if date == @today %> <%= 'has-campaign' if @campaign_days.include?(date) %>">
+          <span class="day-number"><%= date.day %></span>
+          <% daily_sum = @daily_points[date] || 0 %>
+          <div class="daily-points"><%= daily_sum %> pt</div>
+          <% if @campaign_days.include?(date) %>
+            <div class="campaign-dot"></div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <style>
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+    .calendar-day-head {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #94a3b8;
+      padding-bottom: 12px;
+    }
+    .calendar-day-cell {
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 12px;
+      padding-bottom: 8px;
+      border-radius: 16px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: transform 0.2s ease;
+    }
+    .calendar-day-cell:hover:not(.empty) {
+      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .calendar-day-cell.today {
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    }
+    .calendar-day-cell.has-campaign:not(.today) {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    .day-number {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .daily-points {
+      font-size: 0.75rem;
+      font-weight: 800;
+      opacity: 0.9;
+      margin-top: auto;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: var(--accent-primary);
+    }
+    .calendar-day-cell.today .daily-points {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    .campaign-dot {
+      width: 6px;
+      height: 6px;
+      background: #6366f1;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .calendar-day-cell.today .campaign-dot {
+      background: white;
+    }
+    .calendar-day-cell.empty {
+      background: transparent;
+      border: none;
+    }
+  </style>
+
+  <% if @grouped_campaigns.any? %>
+    <% @grouped_campaigns.each_with_index do |(month, campaigns), month_index| %>
+      <div class="month-section mb-4 animate-entrance" style="animation-delay: <%= 0.2 + (month_index * 0.1) %>s;">
+        <h3 class="h6 fw-bold mb-3 px-2 border-start border-primary border-4 text-primary"><%= month %></h3>
+        
+        <div class="row g-3">
+          <% campaigns.each_with_index do |campaign, index| %>
+            <div class="col-12">
+              <div class="glass-card p-3 d-flex align-items-center">
+                <div class="date-badge text-center me-3 p-2 bg-light rounded-4 border-1 border border-light-subtle" style="width: 60px; flex-shrink: 0;">
+                  <span class="d-block fw-bold text-primary" style="font-size: 1.1rem;"><%= campaign.start_at.strftime("%-d") %></span>
+                  <span class="d-block text-secondary extra-small fw-bold"><%= campaign.start_at.strftime("%a") %></span>
+                </div>
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center mb-1">
+                    <span class="badge rounded-pill px-2 py-0 extra-small me-2 <%= campaign.campaign_type == 'recurring' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-danger bg-opacity-10 text-danger' %>">
+                      <%= campaign.campaign_type == 'recurring' ? '定期' : 'イベント' %>
+                    </span>
+                    <h4 class="h6 mb-0 fw-bold"><%= campaign.title %></h4>
+                  </div>
+                  <p class="text-secondary small mb-0 line-clamp-1"><%= campaign.description %></p>
+                </div>
+                <div class="ms-2">
+                  <% if campaign.start_at.to_date == Date.current %>
+                    <span class="badge bg-success rounded-pill px-2 py-1 extra-small animate-pulse">開催中 🔥</span>
+                  <% elsif campaign.start_at.to_date == Date.tomorrow %>
+                    <span class="badge bg-info rounded-pill px-2 py-1 extra-small">明日から 🚀</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="glass-card text-center py-5">
+      <i class="bi bi-calendar-x text-secondary opacity-25" style="font-size: 3rem;"></i>
+      <p class="mt-3 text-secondary">現在登録されているキャンペーンはありません。</p>
+    </div>
+  <% end %>
+
+</div>

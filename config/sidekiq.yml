@@ -1,0 +1,29 @@
+:concurrency: 5
+:queues:
+  - default
+  - mailers
+
+:scheduler:
+  :schedule:
+    line_reminder_job:
+      cron: '0 * * * *'
+      class: LineReminderJob
+      description: "ユーザー設定の時間に合わせて毎時0分にリマインド送信判定を行う"
+    line_recommend_reminder_job:
+      cron: '0 * * * *'
+      class: LineRecommendReminderJob
+      description: "ユーザー設定の朝の時間に合わせて当月の未設定目標をレコメンド通知する"
+    calendar_sync_job:
+      cron: '0 3 * * *'
+      class: CalendarSyncJob
+      description: "キャンペーン情報の生成・Googleカレンダー同期・事前通知を毎日3時に実行する"
+    ai_advisor_job:
+      cron: '0 6 * * *'
+      class: AiAdvisorJob
+      args: ['daily']
+      description: "ユーザーごとのAIアドバイスを毎日6時に生成する"
+    ai_analysis_job:
+      cron: '0 4 */5 * *'
+      class: AiAdvisorJob
+      args: ['analysis']
+      description: "実績に基づくソート順の最適化と分析レポートを5日おきに生成する"

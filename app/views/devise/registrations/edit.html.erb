@@ -1,28 +1,128 @@
-<h2 class="devise_title">マイページ編集</h2>
-
-<%= form_with model: resource, url: registration_path(resource_name), local: true, method: :put, class: 'form' do |f| %>
-
-  <div class="form__group">
-    <%= f.label :email, 'メールアドレス（必須）:' %>
-    <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form__input' %>
+<div class="container-fluid mb-5 pb-5 mt-4">
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
+    <div class="d-flex align-items-center">
+      <div class="profile-avatar me-3">
+        <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+      </div>
+      <div>
+        <h2 class="h5 mb-1"><%= resource.email %></h2>
+        <p class="text-secondary small mb-0">会員ランク: ポイ活ビギナー</p>
+      </div>
+    </div>
   </div>
 
-  <div class="form__group">
-    <%= f.label :password, 'パスワード:' %>
-    <%= f.password_field :password, autocomplete: 'new-password', placeholder: '空欄のままなら変更しません', class: 'form__input' %>
-  </div>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "animate-entrance" }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="form__group">
-    <%= f.label :password_confirmation, 'パスワード確認:' %>
-    <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form__input' %>
-  </div>
+    <!-- 一般設定 -->
+    <div class="glass-card mb-3" style="animation-delay: 0.2s;">
+      <h3 class="h6 font-weight-bold mb-3">⚙️ 一般設定</h3>
+      
+      <div class="form-group mb-4">
+        <%= f.label :email, "メールアドレス", class: "small text-secondary mb-1" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control border-0 bg-light rounded-pill px-3" %>
+      </div>
 
-  <div class="form__group">
-    <%= f.label :current_password, '現在のパスワード（必須）:'  %>
-    <%= f.password_field :current_password, autocomplete: 'current-password', placeholder: '変更を反映するには現在のパスワードを入力してください', class: 'form__input' %>
-  </div>
+      <%= f.fields_for :notification_setting, resource.notification_setting do |setting_f| %>
+        <div class="d-flex align-items-center justify-content-between py-2 border-top border-light mt-3 pt-3">
+          <div>
+            <h4 class="h6 mb-0 font-weight-bold">お知らせ通知</h4>
+            <p class="extra-small text-secondary mb-0">ポイ活のリマインド通知を受け取ります</p>
+          </div>
+          <div class="form-check form-switch p-0">
+            <%= setting_f.check_box :morning_reminder, class: "form-check-input ms-0 custom-switch", role: "switch" %>
+          </div>
+        </div>
 
-  <div class="form__submit">
-    <%= f.submit '更新する', class: 'form__button' %>
+        <div class="mt-3 pt-2 border-top border-light-subtle">
+          <%= setting_f.label :morning_reminder_time, "通知タイミング", class: "extra-small text-secondary fw-bold mb-2 d-block" %>
+          <div class="d-flex align-items-center">
+            <%= setting_f.time_field :morning_reminder_time, class: "form-control border-0 bg-light rounded-pill px-3 py-2 small w-auto me-2" %>
+            <span class="extra-small text-secondary">に毎日リマインドします</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- LINE連携設定 -->
+    <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.25s;">
+      <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
+        <i class="bi bi-line text-success me-2 fs-5"></i>LINE連携設定
+      </h3>
+      
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <span class="extra-small text-secondary fw-bold">現在のステータス</span>
+        </div>
+        <% if resource.line_profile.present? %>
+          <span class="badge bg-success rounded-pill px-3 py-1">連携済み</span>
+        <% else %>
+          <span class="badge bg-light text-secondary rounded-pill px-3 py-1 border border-secondary-subtle">未連携</span>
+        <% end %>
+      </div>
+
+      <% unless resource.line_profile.present? %>
+        <div class="bg-success bg-opacity-10 border border-success border-opacity-25 p-4 mb-3 text-center" style="border-radius: 24px;">
+          <p class="extra-small text-dark fw-bold mb-3">通知を有効にするには安全なアカウント連携が必要です</p>
+          <%= button_to user_line_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" do %>
+            <i class="bi bi-line me-1"></i>LINEと連携する (ログイン)
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- ブラウザ通知設定 (Web Push) -->
+    <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.28s;" data-controller="web-push" data-web-push-vapid-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>">
+      <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
+        <i class="bi bi-laptop text-info me-2 fs-5"></i>ブラウザ・端末通知設定
+      </h3>
+      
+      <div class="bg-info bg-opacity-10 border border-info border-opacity-25 p-3 mb-2 text-center" style="border-radius: 20px;">
+        <p class="extra-small text-dark fw-bold mb-3">LINEを連携しない場合でも、お使いの端末（スマホ・PC）に直接リマインドを届けることができます。</p>
+        <button type="button" data-web-push-target="button" data-action="click->web-push#subscribe" class="btn btn-sm btn-outline-info rounded-pill px-4 py-2 fw-bold w-100">
+          <i class="bi bi-bell-fill me-1"></i>このブラウザで通知を受け取る
+        </button>
+      </div>
+      <p class="extra-small text-secondary text-center mb-0 opacity-75">※iOS/Macの場合は Safari でご利用ください</p>
+    </div>
+
+    <!-- セキュリティ設定（パスワード変更） -->
+    <div class="glass-card mb-3" style="animation-delay: 0.3s;">
+      <div class="d-flex align-items-center justify-content-between mb-3" data-bs-toggle="collapse" href="#passwordSettings" role="button">
+        <h3 class="h6 font-weight-bold mb-0">🔒 セキュリティ設定</h3>
+        <i class="bi bi-chevron-down text-secondary"></i>
+      </div>
+      
+      <div class="collapse" id="passwordSettings">
+        <div class="alert alert-info py-2 extra-small mb-3">
+          パスワードを変更する場合のみ入力してください。
+        </div>
+        <div class="form-group mb-3">
+          <%= f.label :password, "新しいパスワード", class: "small text-secondary mb-1" %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "form-control border-0 bg-light rounded-pill px-3" %>
+        </div>
+        <div class="form-group mb-4">
+          <%= f.label :password_confirmation, "パスワード（確認）", class: "small text-secondary mb-1" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control border-0 bg-light rounded-pill px-3" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 更新確認 -->
+    <div class="glass-card mb-3" style="animation-delay: 0.4s;">
+      <div class="form-group mb-4">
+        <%= f.label :current_password, "現在のパスワード (必須)", class: "small text-secondary mb-1" %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control border-0 bg-light rounded-pill px-3", placeholder: "変更を保存するには入力が必要です" %>
+      </div>
+
+      <%= f.submit "設定を保存する", class: "btn btn-vibrant w-100 rounded-pill py-2 shadow-sm fw-bold" %>
+    </div>
+  <% end %>
+
+  <!-- 注意セクション -->
+  <div class="glass-card border-danger-subtle animate-entrance" style="animation-delay: 0.5s; background: rgba(220, 53, 69, 0.02) !important;">
+    <h3 class="h6 font-weight-bold mb-3">⚠️ 注意</h3>
+    <p class="extra-small mb-3">アカウントを削除すると、これまでの獲得履歴や実績データはすべて失われます。</p>
+    <%= button_to "アカウントを削除する", registration_path(resource_name), data: { confirm: "本当に退会しますか？", turbo_confirm: "本当に退会しますか？" }, method: :delete, class: "btn btn-sm text-danger-soft w-100 py-2" %>
   </div>
-<% end %>
+</div>

@@ -1,18 +1,68 @@
-<h2 class="devise_title">ログイン</h2>
+<div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-5">
+      <div class="text-center mb-5 animate-entrance">
+        <h1 class="fw-bold text-white display-6 mb-2">楽天ポイ活マネジメント</h1>
+        <p class="text-white opacity-75">楽天ポイ活を、データで楽しく効率的に。</p>
+      </div>
 
-<%= form_with model: resource, url: session_path(resource_name), local: true, class: 'form' do |f| %>
+      <div class="glass-card animate-entrance shadow-lg" style="animation-delay: 0.2s;">
+        <h2 class="h5 font-weight-bold text-center mb-4">ログイン</h2>
 
-  <div class="form__group">
-    <p><%= f.label :email, 'メールアドレス（必須）:' %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form__input' %></p>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="mb-3">
+            <%= f.label :email, "メールアドレス", class: "small text-secondary mb-1 ms-2" %>
+            <div class="input-group rounded-pill overflow-hidden bg-light border-0 shadow-sm px-3">
+              <span class="input-group-text bg-transparent border-0 text-secondary pe-0">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control bg-transparent border-0 py-3", placeholder: "example@mail.com" %>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1 ms-2">
+              <%= f.label :password, "パスワード", class: "small text-secondary mb-0" %>
+              <%#= link_to "忘れた方はこちら", new_password_path(resource_name), class: "extra-small text-primary text-decoration-none" %>
+            </div>
+            <div class="input-group rounded-pill overflow-hidden bg-light border-0 shadow-sm px-3">
+              <span class="input-group-text bg-transparent border-0 text-secondary pe-0">
+                <i class="bi bi-lock"></i>
+              </span>
+              <%= f.password_field :password, autocomplete: "current-password", class: "form-control bg-transparent border-0 py-3", placeholder: "••••••••" %>
+            </div>
+          </div>
+
+          <% if devise_mapping.rememberable? %>
+            <div class="form-check mb-4 ms-2">
+              <%= f.check_box :remember_me, class: "form-check-input" %>
+              <%= f.label :remember_me, "ログイン状態を保持する", class: "small text-secondary" %>
+            </div>
+          <% end %>
+
+          <%= f.submit "ログインする", class: "btn btn-vibrant w-100 rounded-pill py-3 fw-bold shadow-sm mb-3" %>
+        <% end %>
+
+        <div class="position-relative text-center my-3">
+          <hr class="text-secondary opacity-25">
+          <span class="bg-white px-2 small text-secondary position-absolute top-50 start-50 translate-middle">または</span>
+        </div>
+
+        <%= button_to user_line_omniauth_authorize_path, data: { turbo: false }, class: "btn w-100 rounded-pill py-3 fw-bold shadow-sm mb-4 d-flex align-items-center justify-content-center", style: "background-color: #06C755; color: white; border: none;" do %>
+          <i class="bi bi-line fs-5 me-2"></i> LINEでログイン
+        <% end %>
+
+        <div class="text-center">
+          <p class="small text-secondary mb-0">アカウントをお持ちでないですか？</p>
+          <%= link_to "新しく登録する（無料）", new_registration_path(resource_name), class: "fw-bold text-primary text-decoration-none small" %>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 animate-entrance" style="animation-delay: 0.4s;">
+        <%= link_to root_path, class: "text-white opacity-50 text-decoration-none extra-small" do %>
+          <i class="bi bi-arrow-left me-1"></i>トップページへ戻る
+        <% end %>
+      </div>
+    </div>
   </div>
-
-  <div class="form__group">
-    <p><%= f.label :password, 'パスワード（必須）:' %></p>
-    <p><%= f.password_field :password, autocomplete: 'current-password', class: 'form__input' %></p>
-  </div>
-
-  <div class="form__submit">
-    <p><%= f.submit 'ログインする', class: 'form__button' %></p>
-  </div>
-<% end %>
+</div>

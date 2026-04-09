@@ -15,7 +15,6 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
   password:
-  socket: /var/lib/mysql/mysql.sock
 
 development:
   <<: *default
@@ -50,12 +49,7 @@ test:
 #
 production:
   <<: *default
-  database: rakuten_point_activity_production
-  username: rakuten_point_activity
-  password: <%= ENV['RAKUTEN_POINT_ACTIVITY_DATABASE_PASSWORD'] %>
-
-production:
-  <<: *default
-  adapter: postgresql
-  encoding: unicode
-  url: <%= ENV['DATABASE_URL'] %>
+  database: <%= ENV.fetch('DB_NAME', 'rakuten_point_activity_production') %>
+  username: <%= ENV.fetch('DB_USERNAME', 'root') %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  socket: /cloudsql/<%= ENV['INSTANCE_CONNECTION_NAME'] %>

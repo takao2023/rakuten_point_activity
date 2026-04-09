@@ -30,7 +30,8 @@
       <div class="card shadow">
         <div class="card-body p-3">
           <% current_user.point_activity_targets.group_by { |pat| pat.point_activity_id }.each do |point_activity_id, targets| %>
-            <% point_activity = PointActivity.find(point_activity_id) %>
+            <% point_activity = @point_activities_cache[point_activity_id] %>
+            <% next unless point_activity %>
             <div class="d-flex align-items-center justify-content-between border-bottom py-1">
               <p class="card-text fw-bold fs-5 mb-0"><%= point_activity.point_activity_title %></p>
               <div class="d-flex align-items-center justify-content-between">
