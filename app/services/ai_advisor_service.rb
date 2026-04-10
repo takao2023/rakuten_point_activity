@@ -4,16 +4,24 @@ class AiAdvisorService
   def initialize(user)
     @user = user
     @client = Gemini.new(
-      api_key: ENV['GEMINI_API_KEY'],
-      model: MODEL_NAME
+      credentials: {
+        service: 'generative-language-api',
+        api_key: ENV['GEMINI_API_KEY']
+      },
+      options: { model: MODEL_NAME, server_sent_events: false }
     )
   end
 
   def generate_daily_advice
     prompt = build_daily_prompt
-    response = @client.generate_content(prompt)
+    response = @client.generate_content({
+      contents: { role: 'user', parts: { text: prompt } }
+    })
     
-    advice_content = response.dig("candidates", 0, "content", "parts", 0, "text")
+    result_hash = response.is_a?(Array) ? response.first : response
+    return unless result_hash
+    
+    advice_content = result_hash.dig("candidates", 0, "content", "parts", 0, "text")
     
     if advice_content.present?
       @user.ai_advices.create!(
@@ -29,8 +37,15 @@ class AiAdvisorService
     stats_data = fetch_earnings_stats
     prompt = build_analysis_prompt(stats_data)
     
-    response = @client.generate_content(prompt)
-    raw_text = response.dig("candidates", 0, "content", "parts", 0, "text")
+    response = @client.generate_content({
+      contents: { role: 'user', parts: { text: prompt } }
+    })
+    
+    result_hash = response.is_a?(Array) ? response.first : response
+    return unless result_hash
+    
+    raw_text = result_hash.dig("candidates", 0, "content", "parts", 0, "text")
+    return unless raw_text
     
     # JSON部分とレポート部分を分離（Gemini が JSON コードブロックで返すことを想定）
     json_match = raw_text.match(/```json\n?(.*?)\n?```/m)
