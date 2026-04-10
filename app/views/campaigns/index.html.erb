@@ -126,7 +126,7 @@
                 </div>
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center mb-1">
-                    <span class="badge rounded-pill px-2 py-0 extra-small me-2 <%= campaign.campaign_type == 'recurring' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-danger bg-opacity-10 text-danger' %>">
+                    <span class="badge rounded-pill px-2 py-0 extra-small me-2 <%= campaign.campaign_type == 'recurring' ? 'bg-warning bg-opacity-10 text-dark' : 'bg-danger bg-opacity-10 text-danger' %>">
                       <%= campaign.campaign_type == 'recurring' ? '定期' : 'イベント' %>
                     </span>
                     <h4 class="h6 mb-0 fw-bold"><%= campaign.title %></h4>
