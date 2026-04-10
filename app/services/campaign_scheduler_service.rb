@@ -37,14 +37,15 @@ class CampaignSchedulerService
   # 毎月1日：ワンダフルデー
   def schedule_wonderful_day
     date = Date.new(@year, @month, 1)
-    Campaign.find_or_create_by!(
+    campaign = Campaign.find_or_create_by!(
       campaign_type: 'recurring',
       start_at: date.beginning_of_day,
       end_at: date.end_of_day
-    ) do |c|
-      c.title = "毎月1日はワンダフルデー"
-      c.description = "全ショップポイント3倍！リピート購入はさらにお得になる、月初めのビッグチャンスです。"
-    end
+    )
+    campaign.update!(
+      title: "#{date.strftime('%m/%d')} ワンダフルデー",
+      description: "全ショップポイント3倍！リピート購入はさらにお得になる、月初めのビッグチャンスです。"
+    )
   end
 
   # 毎月18日：ご愛顧感謝デー（いちばの日）

@@ -28,6 +28,9 @@
           <span class="day-number"><%= date.day %></span>
           <% daily_sum = @daily_points[date] || 0 %>
           <div class="daily-points"><%= daily_sum %> pt</div>
+          <% if @campaign_days.include?(date) %>
+            <div class="campaign-dot"></div>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -89,6 +92,18 @@
     .calendar-day-cell.today .daily-points {
       background: rgba(255, 255, 255, 0.2);
       color: white;
+    }
+    .campaign-dot {
+      width: 6px;
+      height: 6px;
+      background: #6366f1;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .calendar-day-cell.today .campaign-dot {
+      background: white;
     }
     .calendar-day-cell.empty {
       background: transparent;
