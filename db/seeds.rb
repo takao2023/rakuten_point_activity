@@ -114,3 +114,6 @@ end
 
 puts "Database seeded successfully!"
 puts "Services: #{Service.count}, Categories: #{Category.count}, Activities: #{PointActivity.count}"
+
+# 本番・ローカル共通で実績データマスターも登録する
+require_relative 'seeds/seed_achievements'
