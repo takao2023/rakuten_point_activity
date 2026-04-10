@@ -24,13 +24,10 @@
       <% end %>
 
       <% @current_month_days.each do |date| %>
-        <div class="calendar-day-cell <%= 'today' if date == @today %> <%= 'has-campaign' if @campaign_days.include?(date) %>">
+        <div class="calendar-day-cell <%= 'today' if date == @today %>">
           <span class="day-number"><%= date.day %></span>
           <% daily_sum = @daily_points[date] || 0 %>
           <div class="daily-points"><%= daily_sum %> pt</div>
-          <% if @campaign_days.include?(date) %>
-            <div class="campaign-dot"></div>
-          <% end %>
         </div>
       <% end %>
     </div>
@@ -73,10 +70,6 @@
       border: none;
       box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
     }
-    .calendar-day-cell.has-campaign:not(.today) {
-      background: rgba(99, 102, 241, 0.15);
-      border-color: rgba(99, 102, 241, 0.3);
-    }
     .day-number {
       font-size: 1.1rem;
       font-weight: 700;
@@ -96,18 +89,6 @@
     .calendar-day-cell.today .daily-points {
       background: rgba(255, 255, 255, 0.2);
       color: white;
-    }
-    .campaign-dot {
-      width: 6px;
-      height: 6px;
-      background: #6366f1;
-      border-radius: 50%;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .calendar-day-cell.today .campaign-dot {
-      background: white;
     }
     .calendar-day-cell.empty {
       background: transparent;
