@@ -6,7 +6,7 @@ class CampaignsController < ApplicationController
     @current_month_days = (@today.beginning_of_month..@today.end_of_month).to_a
     
     @campaigns = Campaign.order(start_at: :asc)
-                        .where('start_at >= ?', @today.beginning_of_month)
+                        .where('start_at >= ?', @today.beginning_of_month.beginning_of_day)
     
     @grouped_campaigns = @campaigns.group_by { |c| c.start_at.strftime("%Y年%m月") }
     
