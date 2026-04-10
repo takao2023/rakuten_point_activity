@@ -43,7 +43,7 @@ class CampaignSchedulerService
       end_at: date.end_of_day
     )
     campaign.update!(
-      title: "#{date.strftime('%m/%d')} ワンダフルデー",
+      title: "ワンダフルデー",
       description: "全ショップポイント3倍！リピート購入はさらにお得になる、月初めのビッグチャンスです。"
     )
   end
