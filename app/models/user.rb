@@ -37,8 +37,8 @@ class User < ApplicationRecord
     return false unless user_id.present?
 
     client = Line::Bot::Client.new { |config|
-      config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
-      config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
+      config.channel_secret = ENV["LINE_BOT_CHANNEL_SECRET"]
+      config.channel_token = ENV["LINE_BOT_CHANNEL_TOKEN"]
     }
 
     message = { type: 'text', text: text }
@@ -51,8 +51,8 @@ class User < ApplicationRecord
     return false unless user_id.present?
 
     client = Line::Bot::Client.new { |config|
-      config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
-      config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
+      config.channel_secret = ENV["LINE_BOT_CHANNEL_SECRET"]
+      config.channel_token = ENV["LINE_BOT_CHANNEL_TOKEN"]
     }
 
     client.push_message(user_id, flex_content)
