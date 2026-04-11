@@ -11,8 +11,8 @@ class LineReminderJob < ApplicationJob
     count = 0
 
     users.find_each do |user|
-      setting_time = user.notification_setting.morning_reminder_time
-      next unless setting_time.present? && setting_time.hour == current_hour
+      # 複数リマインド時間に対応（reminder_hours を優先し、未設定なら morning_reminder_time にフォールバック）
+      next unless user.notification_setting.should_remind_at?(current_hour)
 
       reminders = user.remaining_point_activities
       

@@ -11,7 +11,8 @@ class LineRecommendReminderJob < ApplicationJob
 
     count = 0
     settings.find_each do |setting|
-      next unless setting.morning_reminder_time.present? && setting.morning_reminder_time.hour == current_hour
+      # 複数リマインド時間に対応
+      next unless setting.should_remind_at?(current_hour)
 
       user = setting.user
       next unless user

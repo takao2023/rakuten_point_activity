@@ -92,6 +92,7 @@ class User < ApplicationRecord
       user.create_notification_setting(
         morning_reminder: true,
         morning_reminder_time: "08:00:00",
+        reminder_hours: [8],
         evening_summary: true,
         evening_summary_time: "21:00:00",
         campaign_alert: true,
