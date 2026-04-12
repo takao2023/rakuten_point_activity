@@ -38,7 +38,7 @@
           <label class="extra-small text-secondary fw-bold mb-3 d-block">🔔 通知を受け取る時間 (複数選択可)</label>
           
           <div class="time-grid mb-3">
-            <% current_hours = setting_f.object.reminder_hours.presence || [] %>
+            <% current_hours = setting_f.object.reminder_hours.to_a.map(&:to_i) %>
             <% (0..23).each do |hour| %>
               <div class="time-chip">
                 <%= setting_f.check_box :reminder_hours, 
@@ -46,7 +46,7 @@
                       multiple: true, 
                       class: "time-checkbox", 
                       id: "hour_#{hour}",
-                      checked: current_hours.map(&:to_i).include?(hour)
+                      checked: current_hours.include?(hour)
                     }, 
                     hour.to_s, nil %>
                 <label for="hour_<%= hour %>" class="time-label">
