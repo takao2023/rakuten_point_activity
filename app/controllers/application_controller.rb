@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:account_update, keys: [
-      notification_setting_attributes: [:id, :morning_reminder, :morning_reminder_time]
+      notification_setting_attributes: [:id, :morning_reminder, :morning_reminder_time, reminder_hours: []]
     ])
   end
 end

@@ -34,12 +34,28 @@
           </div>
         </div>
 
-        <div class="mt-3 pt-2 border-top border-light-subtle">
-          <%= setting_f.label :morning_reminder_time, "通知タイミング", class: "extra-small text-secondary fw-bold mb-2 d-block" %>
-          <div class="d-flex align-items-center">
-            <%= setting_f.time_field :morning_reminder_time, class: "form-control border-0 bg-light rounded-pill px-3 py-2 small w-auto me-2" %>
-            <span class="extra-small text-secondary">に毎日リマインドします</span>
+        <div class="mt-3 pt-3 border-top border-light">
+          <label class="extra-small text-secondary fw-bold mb-3 d-block">🔔 通知を受け取る時間 (複数選択可)</label>
+          
+          <div class="time-grid mb-3">
+            <% (0..23).each do |hour| %>
+              <div class="time-chip">
+                <%= setting_f.check_box :reminder_hours, 
+                    { multiple: true, class: "time-checkbox", id: "hour_#{hour}" }, 
+                    hour.to_s, nil %>
+                <label for="hour_<%= hour %>" class="time-label">
+                  <%= sprintf("%02d:00", hour) %>
+                </label>
+              </div>
+            <% end %>
           </div>
+          
+          <p class="extra-small text-secondary mb-0 opacity-75 text-center">
+            <i class="bi bi-info-circle me-1"></i>選択したすべての時間にリマインド通知が届きます
+          </p>
+          
+          <% # 互換性のための非表示フィールド %>
+          <%= setting_f.hidden_field :morning_reminder_time %>
         </div>
       <% end %>
     </div>

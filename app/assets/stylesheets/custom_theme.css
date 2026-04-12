@@ -740,3 +740,61 @@ a:hover {
 .btn-fab i {
   font-size: 2rem;
 }
+
+/* Time Selection Chips */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 12px;
+  border-radius: 16px;
+}
+
+@media (max-width: 576px) {
+  .time-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.time-chip {
+  position: relative;
+  display: block;
+}
+
+.time-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.time-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 4px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.time-checkbox:checked + .time-label {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+  transform: translateY(-2px);
+}
+
+.time-label:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  border-color: var(--accent-primary);
+}
+
