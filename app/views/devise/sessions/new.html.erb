@@ -1,65 +1,85 @@
 <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6 col-lg-5">
-      <div class="text-center mb-5 animate-entrance">
-        <h1 class="fw-bold text-white display-6 mb-2">楽天ポイ活マネジメント</h1>
-        <p class="text-white opacity-75">楽天ポイ活を、データで楽しく効率的に。</p>
+  <div class="row justify-content-center align-items-center">
+    <!-- デコレーション（PCのみ） -->
+    <div class="col-lg-6 d-none d-lg-block animate-entrance text-white pe-5">
+      <div class="premium-badge mb-4">
+        <i class="bi bi-stars me-2"></i>Smart & Efficient
       </div>
+      <h1 class="display-3 fw-bold mb-4">ポイ活を、<br><span class="text-vibrant-gradient">デザイン</span>する。</h1>
+      <p class="lead opacity-75 mb-5">楽天ポイ活マネジメントは、あなたの「貯める」をデータで見える化し、最も効率的なルートを提案します。</p>
+      
+      <div class="d-flex gap-4">
+        <div class="glass-card text-center p-4 flex-fill" style="background: rgba(255,255,255,0.05) !important;">
+          <h4 class="h2 fw-bold mb-1">24h</h4>
+          <p class="extra-small opacity-50 mb-0">全自動リマインド</p>
+        </div>
+        <div class="glass-card text-center p-4 flex-fill" style="background: rgba(255,255,255,0.05) !important;">
+          <h4 class="h2 fw-bold mb-1">Next</h4>
+          <p class="extra-small opacity-50 mb-0">AI攻略提案</p>
+        </div>
+      </div>
+    </div>
 
-      <div class="glass-card animate-entrance shadow-lg" style="animation-delay: 0.2s;">
-        <h2 class="h5 font-weight-bold text-center mb-4">ログイン</h2>
-
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-          <div class="mb-3">
-            <%= f.label :email, "メールアドレス", class: "small text-secondary mb-1 ms-2" %>
-            <div class="input-group rounded-pill overflow-hidden bg-light border-0 shadow-sm px-3">
-              <span class="input-group-text bg-transparent border-0 text-secondary pe-0">
-                <i class="bi bi-envelope"></i>
-              </span>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control bg-transparent border-0 py-3", placeholder: "example@mail.com" %>
-            </div>
+    <!-- ログインフォーム -->
+    <div class="col-12 col-md-8 col-lg-5">
+      <div class="glass-card animate-entrance shadow-2xl p-4 p-md-5" style="border-radius: 40px; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(20px);">
+        <div class="text-center mb-5">
+          <div class="brand-logo-container mb-3 d-inline-block">
+            <i class="bi bi-p-circle-fill text-vibrant fs-1"></i>
           </div>
-
-          <div class="mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-1 ms-2">
-              <%= f.label :password, "パスワード", class: "small text-secondary mb-0" %>
-              <%#= link_to "忘れた方はこちら", new_password_path(resource_name), class: "extra-small text-primary text-decoration-none" %>
-            </div>
-            <div class="input-group rounded-pill overflow-hidden bg-light border-0 shadow-sm px-3">
-              <span class="input-group-text bg-transparent border-0 text-secondary pe-0">
-                <i class="bi bi-lock"></i>
-              </span>
-              <%= f.password_field :password, autocomplete: "current-password", class: "form-control bg-transparent border-0 py-3", placeholder: "••••••••" %>
-            </div>
-          </div>
-
-          <% if devise_mapping.rememberable? %>
-            <div class="form-check mb-4 ms-2">
-              <%= f.check_box :remember_me, class: "form-check-input" %>
-              <%= f.label :remember_me, "ログイン状態を保持する", class: "small text-secondary" %>
-            </div>
-          <% end %>
-
-          <%= f.submit "ログインする", class: "btn btn-vibrant w-100 rounded-pill py-3 fw-bold shadow-sm mb-3" %>
-        <% end %>
-
-        <div class="position-relative text-center my-3">
-          <hr class="text-secondary opacity-25">
-          <span class="bg-white px-2 small text-secondary position-absolute top-50 start-50 translate-middle">または</span>
+          <h2 class="h4 fw-bold text-dark">Welcome Back</h2>
+          <p class="small text-secondary">アカウント情報を入力してください</p>
         </div>
 
-        <%= button_to user_line_omniauth_authorize_path, data: { turbo: false }, class: "btn w-100 rounded-pill py-3 fw-bold shadow-sm mb-4 d-flex align-items-center justify-content-center", style: "background-color: #06C755; color: white; border: none;" do %>
-          <i class="bi bi-line fs-5 me-2"></i> LINEでログイン
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="mb-4">
+            <div class="input-modern-group">
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control-modern", placeholder: " " %>
+              <%= f.label :email, "メールアドレス", class: "label-floating" %>
+              <i class="bi bi-envelope icon-modern"></i>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="input-modern-group">
+              <%= f.password_field :password, autocomplete: "current-password", class: "form-control-modern", placeholder: " " %>
+              <%= f.label :password, "パスワード", class: "label-floating" %>
+              <i class="bi bi-lock icon-modern"></i>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+            <% if devise_mapping.rememberable? %>
+              <div class="form-check custom-checkbox">
+                <%= f.check_box :remember_me, class: "form-check-input" %>
+                <%= f.label :remember_me, "ログイン状態を保持", class: "small text-secondary" %>
+              </div>
+            <% end %>
+            <a href="#" class="extra-small text-secondary text-decoration-none">再設定はこちら</a>
+          </div>
+
+          <%= f.submit "ログイン", class: "btn btn-vibrant w-100 rounded-pill py-3 fw-bold shadow-vibrant mb-4" %>
         <% end %>
 
-        <div class="text-center">
-          <p class="small text-secondary mb-0">アカウントをお持ちでないですか？</p>
-          <%= link_to "新しく登録する（無料）", new_registration_path(resource_name), class: "fw-bold text-primary text-decoration-none small" %>
+        <div class="separator-text mb-4">
+          <span>または</span>
+        </div>
+
+        <%= button_to user_line_omniauth_authorize_path, data: { turbo: false }, class: "btn-line-rich w-100 mb-4" do %>
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="bi bi-line fs-4 me-3"></i>
+            <span>LINEでログイン</span>
+          </div>
+        <% end %>
+
+        <div class="text-center pt-2">
+          <p class="small text-secondary mb-2">まだアカウントをお持ちでないですか？</p>
+          <%= link_to "新規アカウント作成", new_registration_path(resource_name), class: "fw-bold text-vibrant text-decoration-none small hover-underline" %>
         </div>
       </div>
 
       <div class="text-center mt-4 animate-entrance" style="animation-delay: 0.4s;">
-        <%= link_to root_path, class: "text-white opacity-50 text-decoration-none extra-small" do %>
+        <%= link_to root_path, class: "text-white opacity-50 text-decoration-none extra-small hover-opacity-100 transition-all" do %>
           <i class="bi bi-arrow-left me-1"></i>トップページへ戻る
         <% end %>
       </div>
