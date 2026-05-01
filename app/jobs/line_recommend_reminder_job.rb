@@ -17,6 +17,10 @@ class LineRecommendReminderJob < ApplicationJob
       user = setting.user
       next unless user
 
+      # コースによるLINE通知の制限
+      skip_line_notification = %w[super_beginner beginner].include?(user.selected_course) || (user.selected_course == 'intermediate' && current_hour == 8)
+      next if skip_line_notification
+
       target_month = Date.today.beginning_of_month
       set_target_ids = user.point_activity_targets.where(year_month: target_month).where("target_point > 0").pluck(:point_activity_id)
       missing_activities = PointActivity.where.not(id: set_target_ids)
