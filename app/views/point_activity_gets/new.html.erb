@@ -1,1 +1,20 @@
-<%= render "form", point_activity_get: @point_activity_get, action_text: "設定" %>
+<div class="container-fluid mb-5 pb-5 mt-4">
+  <!-- ヘッダーカード -->
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
+    <div class="d-flex align-items-center mb-1">
+      <%= link_to point_activity_targets_path, class: "btn btn-link text-secondary p-0 me-3" do %>
+        <i class="bi bi-chevron-left fs-4"></i>
+      <% end %>
+      <h2 class="h5 mb-0">💰 実績を入力</h2>
+    </div>
+    <p class="text-secondary small mb-0 mt-2">本日の獲得ポイントを記録します</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 animate-entrance" style="animation-delay: 0.2s;">
+      <div class="glass-card">
+        <%= render "form", point_activity_get: @point_activity_get %>
+      </div>
+    </div>
+  </div>
+</div>

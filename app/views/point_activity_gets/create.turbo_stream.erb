@@ -65,4 +65,8 @@
       </div>
     <% end %>
   <% end %>
+  
+  <%= turbo_stream.append "achievement_notifications" do %>
+    <div data-controller="confetti"></div>
+  <% end %>
 <% end %>

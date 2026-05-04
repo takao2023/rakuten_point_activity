@@ -7,6 +7,9 @@ class AchievementService
     # 未獲得の実績をすべて取得
     unearned_achievements = Achievement.where.not(id: @user.achievement_ids)
     
+    # latest_getが渡されていない場合は、最新の獲得記録を取得する
+    latest_get ||= @user.point_activity_gets.order(created_at: :desc).first
+
     earned_new = []
 
     unearned_achievements.each do |achievement|
@@ -35,7 +38,9 @@ class AchievementService
     when "monthly_points"
       @user.point_activity_gets.where(created_at: Time.current.all_month).sum(:get_point) >= achievement.condition_value
     when "single_points"
-      latest_get && latest_get.get_point >= achievement.condition_value
+      # 過去最大の獲得ポイントで判定する（一括登録時なども漏れなく判定するため）
+      max_point = @user.point_activity_gets.maximum(:get_point) || 0
+      max_point >= achievement.condition_value
     when "streak"
       streak = @user.user_streak
       streak && streak.current_streak >= achievement.condition_value

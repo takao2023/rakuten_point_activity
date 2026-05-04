@@ -1,24 +1,38 @@
+require 'faraday/retry'
+
 class AiAdvisorService
   MODEL_NAME = "gemini-2.0-flash"
+  API_URL = "https://generativelanguage.googleapis.com/v1beta/models/#{MODEL_NAME}:generateContent"
 
   def initialize(user)
     @user = user
-    @client = Gemini.new(
-      credentials: {
-        service: 'generative-language-api',
-        api_key: ENV['GEMINI_API_KEY']
-      },
-      options: { model: MODEL_NAME, server_sent_events: false }
-    )
+    @api_key = ENV['GEMINI_API_KEY']
+    
+    @conn = Faraday.new(url: "#{API_URL}?key=#{@api_key}") do |f|
+      f.request :json
+      f.response :json
+      # 429 等のレートリミット対策でリトライを設定
+      f.request :retry, max: 3, interval: 2, backoff_factor: 2, exceptions: [Faraday::ClientError, Faraday::ServerError]
+    end
   end
 
   def generate_daily_advice
     prompt = build_daily_prompt
-    response = @client.generate_content({
-      contents: { role: 'user', parts: { text: prompt } }
-    })
     
-    result_hash = response.is_a?(Array) ? response.first : response
+    return unless @api_key.present?
+    
+    response = @conn.post do |req|
+      req.body = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }]
+      }
+    end
+    
+    unless response.success?
+      Rails.logger.error "Gemini API Error (daily): #{response.status} - #{response.body}"
+      return
+    end
+    
+    result_hash = response.body
     return unless result_hash
     
     advice_content = result_hash.dig("candidates", 0, "content", "parts", 0, "text")
@@ -37,11 +51,20 @@ class AiAdvisorService
     stats_data = fetch_earnings_stats
     prompt = build_analysis_prompt(stats_data)
     
-    response = @client.generate_content({
-      contents: { role: 'user', parts: { text: prompt } }
-    })
+    return unless @api_key.present?
     
-    result_hash = response.is_a?(Array) ? response.first : response
+    response = @conn.post do |req|
+      req.body = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }]
+      }
+    end
+    
+    unless response.success?
+      Rails.logger.error "Gemini API Error (analysis): #{response.status} - #{response.body}"
+      return
+    end
+    
+    result_hash = response.body
     return unless result_hash
     
     raw_text = result_hash.dig("candidates", 0, "content", "parts", 0, "text")

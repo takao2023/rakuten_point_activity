@@ -1,15 +1,26 @@
 class PointActivityTargetsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_course_selection, only: %i[ index report ]
   before_action :set_point_activity_target, only: %i[ edit update destroy ]
   before_action :redirect_unless_creator, only: %i[ edit update destroy ]
   
   def index
-    @point_activities = fetch_activities_with_targets
+    # 【進捗確認】 広告タップ, ながら, その他
+    @point_activities = fetch_activities_by_categories(["広告タップ", "ながら", "その他"])
     @ai_report = current_user.ai_advices.where(advice_type: 'analysis_report').order(generated_at: :desc).first
   end
 
   def new
-    @point_activities = fetch_activities_by_major_item
+    @point_activity = PointActivity.find(params[:point_activity_id])
+    @point_activity_target = PointActivityTarget.new(
+      point_activity: @point_activity,
+      year_month: Date.today.beginning_of_month
+    )
+  end
+
+  def report
+    # 【完了報告】 毎日くじ, ゲームクリア, ミッションクリア
+    @point_activities = fetch_activities_by_categories(["毎日くじ", "ゲームクリア", "ミッションクリア"])
     @ai_report = current_user.ai_advices.where(advice_type: 'analysis_report').order(generated_at: :desc).first
   end
 
@@ -21,8 +32,8 @@ class PointActivityTargetsController < ApplicationController
     if @point_activity_target.save
       redirect_to point_activity_targets_path, notice: '目標を追加しました！'
     else
+      @point_activity = @point_activity_target.point_activity
       flash.now[:alert] = @point_activity_target.errors.full_messages.join(', ')
-      @point_activities = fetch_activities_with_targets
       render :new
     end
   end
@@ -50,7 +61,7 @@ class PointActivityTargetsController < ApplicationController
     respond_to do |format|
       if success
         format.turbo_stream do
-          @point_activities = fetch_activities_with_targets
+          @point_activities = fetch_activities_by_categories(["広告タップ", "ながら", "その他"])
           flash.now[:notice] = "目標ポイントを更新しました"
         end
         format.html { redirect_to point_activity_targets_path, notice: "目標を更新しました" }
@@ -81,25 +92,20 @@ class PointActivityTargetsController < ApplicationController
 
   private
 
-  def fetch_activities_with_targets
-    # 【ダッシュボード用】 サービス単位で取得
-    # カテゴリでグループ化して表示するため、各サービスの代表カテゴリで分ける
-    Service.all.includes(point_activities: [:category, :point_activity_targets])
-      .group_by { |s| s.point_activities.first&.category&.name || "その他" }
-  end
-
-  def fetch_activities_by_major_item
-    # 【ポイ活一覧用】 大項目単位で取得（大型カード用）
+  def fetch_activities_by_categories(category_names)
     target_month = Date.today.beginning_of_month
 
-    PointActivity.includes(:service, :category, :point_activity_targets)
-      .joins("LEFT JOIN point_activity_targets ON point_activity_targets.point_activity_id = point_activities.id AND point_activity_targets.user_id = #{current_user.id} AND point_activity_targets.year_month = '#{target_month}'")
-      .order("point_activity_targets.priority_score DESC, point_activities.id ASC")
+    # カテゴリ名でフィルタリングし、コースに紐づく案件のみに絞り込む
+    current_user.course_point_activities
+      .includes(:service, :category, :point_activity_targets)
+      .joins(:category)
+      .where(categories: { name: category_names })
+      .order("point_activities.id ASC")
       .group_by { |a| a.category.name }
   end
 
   def point_activity_target_params
-    params.require(:point_activity_target).permit(:user_id, :point_activity_id, :target_point)
+    params.require(:point_activity_target).permit(:user_id, :point_activity_id, :target_point, :year_month)
   end
 
   def set_point_activity_target
@@ -107,6 +113,6 @@ class PointActivityTargetsController < ApplicationController
   end 
   
   def redirect_unless_creator
-    redirect_to root_path unless @point_activity_target.user == current_user
+    redirect_to point_activity_targets_path unless @point_activity_target.user == current_user
   end
 end

@@ -23,89 +23,16 @@
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control border-0 bg-light rounded-pill px-3" %>
       </div>
 
-      <%= f.fields_for :notification_setting, resource.notification_setting do |setting_f| %>
-        <div class="d-flex align-items-center justify-content-between py-2 border-top border-light mt-3 pt-3">
-          <div>
-            <h4 class="h6 mb-0 font-weight-bold">お知らせ通知</h4>
-            <p class="extra-small text-secondary mb-0">ポイ活のリマインド通知を受け取ります</p>
-          </div>
-          <div class="form-check form-switch p-0">
-            <%= setting_f.check_box :morning_reminder, class: "form-check-input ms-0 custom-switch", role: "switch" %>
-          </div>
-        </div>
-
-        <div class="mt-3 pt-3 border-top border-light">
-          <label class="extra-small text-secondary fw-bold mb-3 d-block">🔔 通知を受け取る時間 (複数選択可)</label>
-          
-          <div class="time-grid mb-3">
-            <% current_hours = setting_f.object.reminder_hours.to_a.map(&:to_i) %>
-            <% (0..23).each do |hour| %>
-              <div class="time-chip">
-                <%= setting_f.check_box :reminder_hours, 
-                    { 
-                      multiple: true, 
-                      class: "time-checkbox", 
-                      id: "hour_#{hour}",
-                      checked: current_hours.include?(hour)
-                    }, 
-                    hour.to_s, nil %>
-                <label for="hour_<%= hour %>" class="time-label">
-                  <%= sprintf("%02d:00", hour) %>
-                </label>
-              </div>
-            <% end %>
-          </div>
-          
-          <p class="extra-small text-secondary mb-0 opacity-75 text-center">
-            <i class="bi bi-info-circle me-1"></i>選択したすべての時間にリマインド通知が届きます
-          </p>
-          
-          <% # 互換性のための非表示フィールド %>
-          <%= setting_f.hidden_field :morning_reminder_time %>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- LINE連携設定 -->
-    <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.25s;">
-      <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
-        <i class="bi bi-line text-success me-2 fs-5"></i>LINE連携設定
-      </h3>
-      
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <div>
-          <span class="extra-small text-secondary fw-bold">現在のステータス</span>
-        </div>
-        <% if resource.line_profile.present? %>
-          <span class="badge bg-success rounded-pill px-3 py-1">連携済み</span>
-        <% else %>
-          <span class="badge bg-light text-secondary rounded-pill px-3 py-1 border border-secondary-subtle">未連携</span>
+      <div class="mt-4 pt-3 border-top border-light">
+        <h4 class="h6 mb-2 font-weight-bold">お知らせ通知について</h4>
+        <p class="extra-small text-secondary mb-3">
+          通知のスケジュールは、設定中の「コース」に基づいて自動制御されます。<br>
+          現在のコース：<strong><%= resource.selected_course_name %></strong>
+        </p>
+        <%= link_to courses_path, class: "btn btn-sm btn-outline-primary rounded-pill px-3 py-1", data: { turbo: false } do %>
+          <i class="bi bi-compass me-1"></i>コースを変更する
         <% end %>
       </div>
-
-      <% unless resource.line_profile.present? %>
-        <div class="bg-success bg-opacity-10 border border-success border-opacity-25 p-4 mb-3 text-center" style="border-radius: 24px;">
-          <p class="extra-small text-dark fw-bold mb-3">通知を有効にするには安全なアカウント連携が必要です</p>
-          <%= button_to user_line_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" do %>
-            <i class="bi bi-line me-1"></i>LINEと連携する (ログイン)
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- ブラウザ通知設定 (Web Push) -->
-    <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.28s;" data-controller="web-push" data-web-push-vapid-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>">
-      <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
-        <i class="bi bi-laptop text-info me-2 fs-5"></i>ブラウザ・端末通知設定
-      </h3>
-      
-      <div class="bg-info bg-opacity-10 border border-info border-opacity-25 p-3 mb-2 text-center" style="border-radius: 20px;">
-        <p class="extra-small text-dark fw-bold mb-3">LINEを連携しない場合でも、お使いの端末（スマホ・PC）に直接リマインドを届けることができます。</p>
-        <button type="button" data-web-push-target="button" data-action="click->web-push#subscribe" class="btn btn-sm btn-outline-info rounded-pill px-4 py-2 fw-bold w-100">
-          <i class="bi bi-bell-fill me-1"></i>このブラウザで通知を受け取る
-        </button>
-      </div>
-      <p class="extra-small text-secondary text-center mb-0 opacity-75">※iOS/Macの場合は Safari でご利用ください</p>
     </div>
 
     <!-- セキュリティ設定（パスワード変更） -->
@@ -131,7 +58,7 @@
     </div>
 
     <!-- 更新確認 -->
-    <div class="glass-card mb-3" style="animation-delay: 0.4s;">
+    <div class="glass-card mb-4" style="animation-delay: 0.4s;">
       <div class="form-group mb-4">
         <%= f.label :current_password, "現在のパスワード", class: "small text-secondary mb-1" %>
         <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control border-0 bg-light rounded-pill px-3", placeholder: (resource.line_profile.present? ? "通知設定のみなら入力不要です" : "変更を保存するには入力が必要です") %>
@@ -154,6 +81,49 @@
       <%= f.submit "設定を保存する", class: "btn btn-vibrant w-100 rounded-pill py-2 shadow-sm fw-bold" %>
     </div>
   <% end %>
+
+  <!-- 外部連携設定 (フォームの外側) -->
+  <!-- LINE連携設定 -->
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.25s;">
+    <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
+      <i class="bi bi-line text-success me-2 fs-5"></i>LINE連携設定
+    </h3>
+    
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div>
+        <span class="extra-small text-secondary fw-bold">現在のステータス</span>
+      </div>
+      <% if resource.line_profile.present? %>
+        <span class="badge bg-success rounded-pill px-3 py-1">連携済み</span>
+      <% else %>
+        <span class="badge bg-light text-secondary rounded-pill px-3 py-1 border border-secondary-subtle">未連携</span>
+      <% end %>
+    </div>
+
+    <% unless resource.line_profile.present? %>
+      <div class="bg-success bg-opacity-10 border border-success border-opacity-25 p-4 mb-3 text-center" style="border-radius: 24px;">
+        <p class="extra-small text-dark fw-bold mb-3">通知を有効にするには安全なアカウント連携が必要です</p>
+        <%= button_to user_line_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" do %>
+          <i class="bi bi-line me-1"></i>LINEと連携する (ログイン)
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- ブラウザ通知設定 (Web Push) -->
+  <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.28s;" data-controller="web-push" data-web-push-vapid-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>">
+    <h3 class="h6 font-weight-bold mb-3 d-flex align-items-center">
+      <i class="bi bi-laptop text-info me-2 fs-5"></i>ブラウザ・端末通知設定
+    </h3>
+    
+    <div class="bg-info bg-opacity-10 border border-info border-opacity-25 p-3 mb-2 text-center" style="border-radius: 20px;">
+      <p class="extra-small text-dark fw-bold mb-3">LINEを連携しない場合でも、お使いの端末（スマホ・PC）に直接リマインドを届けることができます。</p>
+      <button type="button" data-web-push-target="button" data-action="click->web-push#subscribe" class="btn btn-sm btn-outline-info rounded-pill px-4 py-2 fw-bold w-100">
+        <i class="bi bi-bell-fill me-1"></i>このブラウザで通知を受け取る
+      </button>
+    </div>
+    <p class="extra-small text-secondary text-center mb-0 opacity-75">※iOS/Macの場合は Safari でご利用ください</p>
+  </div>
 
   <!-- 注意セクション -->
   <div class="glass-card border-danger-subtle animate-entrance" style="animation-delay: 0.5s; background: rgba(220, 53, 69, 0.02) !important;">

@@ -21,6 +21,6 @@ class CampaignsController < ApplicationController
                       .where(created_at: month_time_range)
                       .to_a
                       .group_by { |get| get.created_at.to_date }
-                      .transform_values { |gets| gets.sum(&:get_point) }
+                      .transform_values { |gets| gets.sum { |g| g.get_point.to_i } }
   end
 end

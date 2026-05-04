@@ -5,6 +5,7 @@ ruby '3.3.6'
 gem 'logger'
 
 gem 'rails', '~> 7.1.0'
+gem 'image_processing', '~> 1.2'
 gem 'mysql2', '~> 0.5.3'
 gem 'puma', '5.5.2'
 gem 'sass-rails', '6.0.0'
@@ -45,10 +46,11 @@ group :production do
 end
 
 # === 外部 API 連携 & ツール ===
-gem 'line-bot-api'
+gem 'line-bot-api', '1.28.0'
 gem 'omniauth-line'
 gem 'omniauth-rails_csrf_protection'
 gem 'gemini-ai'
+gem 'faraday-retry'
 gem 'chartkick'
 gem 'groupdate'
 

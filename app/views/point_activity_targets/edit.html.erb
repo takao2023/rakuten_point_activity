@@ -13,7 +13,16 @@
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6 animate-entrance" style="animation-delay: 0.2s;">
       <div class="glass-card">
-        <%= form_with(model: @point_activity_target, local: true) do |f| %>
+        <%= form_with(model: @point_activity_target, local: true, data: { turbo: false }) do |f| %>
+          <% if @point_activity_target.errors.any? %>
+            <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4 small">
+              <ul class="mb-0">
+                <% @point_activity_target.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
           <div class="mb-4 d-flex align-items-center">
             <div class="activity-icon me-3">
               <i class="bi bi-stars text-primary fs-4"></i>
@@ -40,4 +49,6 @@
       </div>
     </div>
   </div>
+  
+  <%= render "recommendation_modal", service: @point_activity_target.point_activity.service %>
 </div>

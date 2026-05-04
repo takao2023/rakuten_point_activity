@@ -20,7 +20,7 @@ class NotificationSetting < ApplicationRecord
 
   def clean_reminder_hours
     return if reminder_hours.nil?
-    # 文字列を整数に変換し、重複と空文字を除去、昇順にソートして保存
-    self.reminder_hours = reminder_hours.map(&:to_i).uniq.sort.reject { |h| h < 0 || h > 23 }
+    # 文字列や数値をFloatに変換し、重複と空文字を除去、昇順にソートして保存
+    self.reminder_hours = reminder_hours.map(&:to_f).uniq.sort.reject { |h| h < 0 || h >= 24.0 }
   end
 end

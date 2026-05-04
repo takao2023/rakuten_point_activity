@@ -26,18 +26,9 @@ class PointActivityGetsController < ApplicationController
     @point_activities = PointActivity.all
     @point_activity_get = PointActivityGet.new(point_activity_get_params)
     if @point_activity_get.save
-      # サービス（ポイ活名全体）を特定
       @activity = @point_activity_get.point_activity
       @service = @activity.service
-      
-      # UI更新用にサービスの情報を取得
       @card_service = @service
-      
-      # ストリークの更新
-      streak = current_user.user_streak || current_user.create_user_streak
-      streak.update_streak!
-      
-      # 実績の判定
       @new_achievements = Achievement.check_and_award!(current_user)
 
       respond_to do |format|
@@ -46,22 +37,21 @@ class PointActivityGetsController < ApplicationController
           @target_points = current_user.point_activity_targets.sum(:target_point)
           @today_points = current_user.point_activity_gets.where(created_at: @today_date.beginning_of_day..@today_date.end_of_day).sum(:get_point)
           @month_points = current_user.point_activity_gets.where(created_at: @today_date.beginning_of_month..@today_date.end_of_month).sum(:get_point)
-          @user_streak = streak
-          
-          # チャート用データ更新
+          @user_streak = current_user.user_streak || current_user.create_user_streak
           remaining_points = [@target_points - @month_points, 0].max
           @achievement_chart_data = [
             ['獲得済', @month_points],
             ['残り目標', remaining_points]
           ]
-          
           render :create
         end
-        format.html { redirect_to root_path, notice: 'ポイントが追加されました。' }
+        format.html { redirect_to point_activity_targets_path, notice: 'ポイントが追加されました。' }
       end
     else
+      @point_activities = PointActivity.all
       respond_to do |format|
-        format.html { redirect_to root_path, alert: 'ポイントの追加に失敗しました。' }
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("get_form_#{@point_activity_get.point_activity_id}", partial: "form", locals: { point_activity_get: @point_activity_get }) }
       end
     end
   end
@@ -72,7 +62,7 @@ class PointActivityGetsController < ApplicationController
 
   def update
     if @point_activity_get.update(point_activity_get_params)
-      redirect_to root_path, notice: 'ポイントが更新されました。'
+      redirect_to point_activity_targets_path, notice: 'ポイントが更新されました。'
     else
       @point_activities = PointActivity.all
       render :edit
@@ -81,7 +71,7 @@ class PointActivityGetsController < ApplicationController
   
   def destroy
     @point_activity_get.destroy
-    redirect_to root_path, notice: 'ポイントが削除されました。'
+    redirect_to point_activity_targets_path, notice: 'ポイントが削除されました。'
   end
 
   def bulk_new
@@ -136,15 +126,13 @@ class PointActivityGetsController < ApplicationController
     # 更新後の表示準備 (create.turbo_stream.erb と共通の変数)
     @card_service = @service
     
-    streak = current_user.user_streak || current_user.create_user_streak
-    streak.update_streak!
     @new_achievements = Achievement.check_and_award!(current_user)
 
     @today_date = Time.zone.today
     @target_points = current_user.point_activity_targets.sum(:target_point)
     @today_points = current_user.point_activity_gets.where(created_at: @today_date.beginning_of_day..@today_date.end_of_day).sum(:get_point)
     @month_points = current_user.point_activity_gets.where(created_at: @today_date.beginning_of_month..@today_date.end_of_month).sum(:get_point)
-    @user_streak = streak
+    @user_streak = current_user.user_streak || current_user.create_user_streak
     
     remaining_points = [@target_points - @month_points, 0].max
     @achievement_chart_data = [
@@ -154,12 +142,12 @@ class PointActivityGetsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream { render :create }
-      format.html { redirect_to root_path, notice: 'ポイントが一括登録されました。' }
+      format.html { redirect_to point_activity_targets_path, notice: 'ポイントが一括登録されました。' }
     end
   rescue => e
     logger.error "Bulk create error: #{e.message}"
     respond_to do |format|
-      format.html { redirect_to root_path, alert: '一括登録に失敗しました。' }
+      format.html { redirect_to point_activity_targets_path, alert: '一括登録に失敗しました。' }
     end
   end
 
@@ -174,6 +162,6 @@ class PointActivityGetsController < ApplicationController
   end 
   
   def redirect_unless_creator
-    redirect_to root_path unless @point_activity_get.user == current_user
+    redirect_to point_activity_targets_path unless @point_activity_get.user == current_user
   end
 end

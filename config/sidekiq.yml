@@ -6,9 +6,9 @@
 :scheduler:
   :schedule:
     line_reminder_job:
-      cron: '0 * * * *'
+      cron: '0,30 * * * *'
       class: LineReminderJob
-      description: "ユーザー設定の時間に合わせて毎時0分にリマインド送信判定を行う"
+      description: "ユーザー設定の時間に合わせて毎時0分および30分にリマインド送信判定を行う"
     line_recommend_reminder_job:
       cron: '0 * * * *'
       class: LineRecommendReminderJob

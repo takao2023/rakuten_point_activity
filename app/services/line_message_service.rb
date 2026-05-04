@@ -3,7 +3,7 @@ class LineMessageService
   def self.remind_flex_message(user, reminders)
     {
       type: 'flex',
-      altText: "【リマインド】本日のポイ活は残り#{reminders.count}件です！✨",
+      altText: "【リマインド】現在プレイ可能なポイ活が#{reminders.count}件あります！✨",
       contents: {
         type: "bubble",
         header: {
@@ -50,14 +50,14 @@ class LineMessageService
           contents: [
             {
               type: "text",
-              text: "本日のポイ活リマインド",
+              text: "ポイ活可能時間のリマインド",
               weight: "bold",
               size: "lg",
               margin: "md"
             },
             {
               type: "text",
-              text: "残り目標: #{reminders.count}件",
+              text: "現在プレイ可能: #{reminders.count}件",
               size: "sm",
               color: "#aaaaaa",
               margin: "xs"
@@ -78,14 +78,14 @@ class LineMessageService
                   contents: [
                     {
                       type: "text",
-                      text: "●",
+                      text: "▶",
                       size: "xs",
                       color: "#ff9800",
                       flex: 0
                     },
                     {
                       type: "text",
-                      text: activity.point_activity_title,
+                      text: activity.full_title,
                       size: "sm",
                       color: "#666666",
                       margin: "md",
@@ -126,4 +126,5 @@ class LineMessageService
       }
     }
   end
+
 end

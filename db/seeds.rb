@@ -22,14 +22,14 @@ end
 
 puts "Seeding Services..."
 services_data = [
-  { code: "S01", name: "楽天スーパーポイントスクリーン", platform: "アプリ", official_url: "" },
-  { code: "S02", name: "楽天ウェブ検索", platform: "ブラウザ/アプリ", official_url: "https://r10.to/hPscUv" },
-  { code: "S03", name: "楽天PointMall", platform: "ブラウザ", official_url: "https://pointmall.rakuten.co.jp/" },
-  { code: "S04", name: "Rakuten Link", platform: "アプリ", official_url: "" },
-  { code: "S05", name: "R チャンネル", platform: "ブラウザ/アプリ", official_url: "https://channel.rakuten.co.jp/" },
-  { code: "S06", name: "楽天ペイ", platform: "アプリ", official_url: "" },
-  { code: "S07", name: "楽天PointClub", platform: "アプリ", official_url: "" },
-  { code: "S08", name: "楽天ポイントモール", platform: "アプリ", official_url: "" }
+  { code: "S01", name: "楽天スーパーポイントスクリーン", platform: "アプリ", official_url: "", recommended_points: 550, icon: "bi-phone" },
+  { code: "S02", name: "楽天ウェブ検索", platform: "ブラウザ/アプリ", official_url: "https://r10.to/hPscUv", recommended_points: 30, icon: "bi-search" },
+  { code: "S03", name: "楽天PointMall", platform: "ブラウザ", official_url: "https://pointmall.rakuten.co.jp/" , recommended_points: 200},
+  { code: "S04", name: "Rakuten Link", platform: "アプリ", official_url: "" , recommended_points: 50},
+  { code: "S05", name: "R チャンネル", platform: "ブラウザ/アプリ", official_url: "https://channel.rakuten.co.jp/", recommended_points: 850, icon: "bi-tv" },
+  { code: "S06", name: "楽天ペイ", platform: "アプリ", official_url: "" , recommended_points: 10},
+  { code: "S07", name: "楽天PointClub", platform: "アプリ", official_url: "" , recommended_points: 5},
+  { code: "S08", name: "楽天ポイントモール", platform: "アプリ", official_url: "" , recommended_points: 25}
 ]
 services = {}
 services_data.each do |data|
@@ -57,18 +57,19 @@ activities = [
   { service_code: "S03", category_code: "C02", major: "ポコポコもぐらたたき", small: "にげるモード", freq: "1回/day", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "ポコポコもぐらたたき", small: "さがすモード", freq: "3回/day", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "ポコポコもぐらたたき", small: "ミニゲーム", freq: "1回/2h", stars: 1 },
-  { service_code: "S03", category_code: "C04", major: "賢者の難問クイズ", small: "", freq: "3回/day", stars: 3 },
+  { service_code: "S03", category_code: "C04", major: "賢者の難問クイズ", small: "通常クイズ", freq: "1回/day", stars: 3 },
+  { service_code: "S03", category_code: "C04", major: "賢者の難問クイズ", small: "特集クイズ", freq: "1回/day", stars: 3 },
+  { service_code: "S03", category_code: "C04", major: "賢者の難問クイズ", small: "ミッション", freq: "1回/day", stars: 3 },
   { service_code: "S03", category_code: "C02", major: "幻の海底神殿", small: "ゲームTOP", freq: "2回/day", stars: 2 },
-  { service_code: "S03", category_code: "C02", major: "幻の海底神殿", small: "サブゲーム", freq: "4回/day", stars: 1 },
+  { service_code: "S03", category_code: "C02", major: "幻の海底神殿", small: "サブゲーム", freq: "1回/day", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "トレジャーBINGO", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "遺跡探検すごろく", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "たびろく", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "クラッシュアイス", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "スロットパラダイス", small: "", freq: "", stars: 2 },
-  { service_code: "S03", category_code: "C02", major: "ゲームステーション", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "ぷくぷくラグーン", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "みんなのフルーツ農場生活", small: "", freq: "", stars: 1 },
-  { service_code: "S03", category_code: "C02", major: "隅の体験ミニゲーム", small: "", freq: "", stars: 1 },
+  { service_code: "S03", category_code: "C02", major: "頭の体操ミニゲーム", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C02", major: "どこどこ？まちがい探し", small: "", freq: "", stars: 1 },
   { service_code: "S03", category_code: "C03", major: "モールガチャ", small: "", freq: "1回/day", stars: 3 },
   { service_code: "S03", category_code: "C03", major: "スクラッチ", small: "", freq: "1回/day", stars: 3 },
@@ -77,17 +78,17 @@ activities = [
   { service_code: "S03", category_code: "C03", major: "ドリームくじ", small: "", freq: "", stars: 3 },
 
   # S08 (楽天ポイントモール - App)
-  { service_code: "S08", category_code: "C02", major: "デイリーガチャ", small: "", freq: "2回/day", stars: 3 },
-  { service_code: "S08", category_code: "C02", major: "海底大作戦くじ", small: "", freq: "2回/day", stars: 3 },
-  { service_code: "S08", category_code: "C02", major: "竜宮探索くじ", small: "", freq: "2回/day", stars: 3 },
-  { service_code: "S08", category_code: "C02", major: "みこくじ", small: "", freq: "1回/day", stars: 3 },
-  { service_code: "S08", category_code: "C02", major: "ゆみくじ", small: "", freq: "1回/day", stars: 3 },
+  { service_code: "S08", category_code: "C03", major: "デイリーガチャ", small: "", freq: "2回/day", stars: 3 },
+  { service_code: "S08", category_code: "C03", major: "海底大作戦くじ", small: "", freq: "2回/day", stars: 3 },
+  { service_code: "S08", category_code: "C03", major: "竜宮探索くじ", small: "", freq: "2回/day", stars: 3 },
+  { service_code: "S08", category_code: "C03", major: "みこくじ", small: "", freq: "1回/day", stars: 3 },
+  { service_code: "S08", category_code: "C03", major: "ゆみくじ", small: "", freq: "1回/day", stars: 3 },
   { service_code: "S08", category_code: "C01", major: "動画チェック", small: "", freq: "1回/day", stars: 3 },
-  { service_code: "S08", category_code: "C04", major: "モールくじ獲得", small: "", freq: "1回/day", stars: 3 },
+  { service_code: "S08", category_code: "C04", major: "宝箱", small: "", freq: "1回/day", stars: 3 },
 
   # S04 (Rakuten Link)
   { service_code: "S04", category_code: "C05", major: "ミッション", small: "", freq: "6回/week", stars: 3 },
-  { service_code: "S04", category_code: "C05", major: "ニュース", small: "", freq: "1回/day", stars: 3 },
+  { service_code: "S04", category_code: "C04", major: "ニュース", small: "", freq: "1回/day", stars: 3 },
 
   # S06 (楽天ペイ)
   { service_code: "S06", category_code: "C06", major: "ジャンケン", small: "", freq: "1回/day", stars: 1 },
@@ -99,6 +100,25 @@ activities = [
 ]
 
 activities.each do |data|
+  # 完了報告対象カテゴリかどうか
+  is_completion_tab = ["毎日くじ", "ゲームクリア", "ミッションクリア"].include?(categories[data[:category_code]].name)
+
+  # 頻度からモードを判定
+  mode = 'daily'
+  interval = nil
+  if data[:freq].to_s.include?('2h')
+    mode = 'fixed_equal'
+    interval = 7200
+  elsif data[:freq].to_s.include?('3h')
+    mode = 'fixed_equal'
+    interval = 10800
+  elsif data[:freq].to_s.include?('12h') || (data[:major] == "幻の海底神殿" && data[:small] == "ゲームTOP")
+    mode = 'fixed_equal'
+    interval = 43200
+  elsif data[:freq].to_s.include?('week')
+    mode = 'weekly'
+  end
+
   PointActivity.create!(
     service: services[data[:service_code]],
     category: categories[data[:category_code]],
@@ -107,8 +127,13 @@ activities.each do |data|
     frequency: data[:freq],
     recommendation_level: data[:stars],
     strategy_url: data[:strategy_url],
-    # 初期説明文
-    description: "#{services[data[:service_code]].name}の#{data[:major]}#{data[:small].present? ? "（#{data[:small]}）" : ""}です。"
+    activity_type: is_completion_tab ? 1 : 0, # カテゴリに応じて切替
+    time_limit_modes: mode,
+    interval_seconds: interval,
+    executions_per_reward: 1,
+    per_window_max_executions: 1,
+    daily_max_executions: data[:freq].to_s.scan(/\d+/).first&.to_i || 1,
+    description: "#{services[data[:service_code]].name} of #{data[:major]}#{data[:small].present? ? "（#{data[:small]}）" : ""}です。"
   )
 end
 

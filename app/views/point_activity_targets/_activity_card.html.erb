@@ -22,26 +22,16 @@
     <%# サービス全体の実績数値 %>
     <div class="mb-2">
       <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="text-secondary small">当月目標</span>
-        <span class="fw-bold text-success"><%= pa.current_month_target(current_user) %> pt</span>
-      </div>
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="text-secondary small">当月獲得済み</span>
+        <span class="text-secondary small">当月獲得累計</span>
         <span class="fw-bold text-success"><%= pa.current_month_gets(current_user) %> pt</span>
       </div>
-    </div>
-
-    <%# サービス全体の進捗バー %>
-    <% rate = pa.achievement_rate(current_user) %>
-    <div class="my-3">
+      <% 
+        today_execs = pa.point_activities.sum { |act| act.today_execution_count(current_user) }
+        total_daily_max = pa.point_activities.sum { |act| act.daily_max_executions || 0 }
+      %>
       <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="text-secondary extra-small">進捗率</span>
-        <span class="fw-bold text-dark" style="font-size: 0.9rem;"><%= rate %>%</span>
-      </div>
-      <div class="progress shadow-sm" style="height: 10px; border-radius: 5px; background-color: rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.3);">
-        <div class="progress-bar bg-vibrant progress-bar-striped progress-bar-animated" 
-             role="progressbar" 
-             style="width: <%= [rate, 100].min %>%"></div>
+        <span class="text-secondary small">今日の完了報告</span>
+        <span class="fw-bold text-primary"><%= today_execs %><%= total_daily_max > 0 ? " / #{total_daily_max}" : "" %> 回</span>
       </div>
     </div>
 
@@ -59,44 +49,24 @@
               </div>
             </div>
             
-            <% if activities.size > 1 || activities.first.small_item.present? %>
-              <%# 小項目がある場合、または同じ大項目に複数ある場合 %>
-              <div class="ps-2 border-start border-primary border-opacity-10 ms-1 mt-1">
-                <% activities.each do |activity| %>
-                  <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-white border-opacity-10">
-                    <div class="extra-small text-secondary">
-                      <%= activity.small_item.present? ? activity.small_item : activity.frequency %>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge rounded-pill bg-white bg-opacity-25 text-primary extra-small border border-white border-opacity-50 shadow-sm"><%= activity.current_month_gets(current_user) %> pt</span>
-                      <%= turbo_frame_tag "get_form_#{activity.id}" do %>
-                        <%= link_to new_point_activity_get_path(point_activity_id: activity.id, frame_id: "get_form_#{activity.id}"), 
-                                    class: "text-vibrant d-flex align-items-center justify-content-center", 
-                                    style: "font-size: 1.2rem;" do %>
-                          <i class="bi bi-plus-circle-fill"></i>
-                        <% end %>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% else %>
-              <%# 小項目がない単一項目の場合 %>
-              <% activity = activities.first %>
-              <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-white border-opacity-25">
-                <div class="extra-small text-secondary"><%= activity.frequency %></div>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="badge rounded-pill bg-white bg-opacity-25 text-primary extra-small border border-white border-opacity-50 shadow-sm"><%= activity.current_month_gets(current_user) %> pt</span>
-                  <%= turbo_frame_tag "get_form_#{activity.id}" do %>
-                    <%= link_to new_point_activity_get_path(point_activity_id: activity.id, frame_id: "get_form_#{activity.id}"), 
-                                class: "text-vibrant d-flex align-items-center justify-content-center", 
-                                style: "font-size: 1.2rem;" do %>
-                      <i class="bi bi-plus-circle-fill"></i>
+            <div class="ps-2 border-start border-primary border-opacity-10 ms-1 mt-1">
+              <% activities.each do |activity| %>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-white border-opacity-10">
+                  <div class="extra-small text-secondary flex-grow-1">
+                    <%= activity.small_item.present? ? activity.small_item : activity.frequency %>
+                    <% if activity.time_managed? %>
+                      <div class="opacity-75" style="font-size: 0.7rem;">
+                        今日: <%= activity.today_execution_count(current_user) %><%= activity.daily_max_executions ? " / #{activity.daily_max_executions}" : "" %>
+                      </div>
                     <% end %>
-                  <% end %>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge rounded-pill bg-white bg-opacity-25 text-primary extra-small border border-white border-opacity-50 shadow-sm"><%= activity.current_month_gets(current_user) %> pt</span>
+                    <%= render partial: "point_activity_targets/activity_execution_button", locals: { activity: activity } %>
+                  </div>
                 </div>
-              </div>
-            <% end %>
+              <% end %>
+            </div>
           </div>
         <% end %>
       </div>
@@ -114,18 +84,14 @@
       </div>
     </div>
 
-    <%# 目標設定への遷移（最初の項目を代表とするか、あるいは一覧へ） %>
+    <%# 目標設定への遷移を詳細開閉に変更、または一覧へ誘導 %>
     <div class="mt-4 d-grid">
-      <% first_activity = pa.point_activities.first %>
-      <% target_id = first_activity&.current_target_id(current_user) %>
-      <% path = target_id.present? ? edit_point_activity_target_path(target_id) : ensure_current_month_target_point_activity_targets_path(point_activity_id: first_activity&.id) %>
-      <%= link_to path, class: "btn btn-vibrant btn-sm w-100 py-2 shadow" do %>
-        <% if pa.current_month_target(current_user) > 0 %>
-          目標を変更する
-        <% else %>
-          目標を設定する
-        <% end %>
-      <% end %>
+      <button class="btn btn-vibrant btn-sm w-100 py-2 shadow" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#detailsCollapse<%= pa.id %>">
+        詳細・攻略を見る
+      </button>
     </div>
   </div>
 </div>

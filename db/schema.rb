@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_24_192015) do
   create_table "achievements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
@@ -19,6 +19,55 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.integer "condition_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activity_executions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "point_activity_id", null: false
+    t.datetime "executed_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["point_activity_id"], name: "index_activity_executions_on_point_activity_id"
+    t.index ["user_id"], name: "index_activity_executions_on_user_id"
+  end
+
+  create_table "activity_logs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "point_activity_id", null: false
+    t.string "action_type"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["point_activity_id"], name: "index_activity_logs_on_point_activity_id"
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
   end
 
   create_table "activity_schedules", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -111,6 +160,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.string "notification_channel", default: "line"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "reminder_hours"
     t.index ["user_id"], name: "index_notification_settings_on_user_id"
   end
 
@@ -132,6 +182,14 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.bigint "category_id"
     t.string "major_item"
     t.string "small_item"
+    t.integer "activity_type", default: 0
+    t.integer "interval_seconds"
+    t.integer "executions_per_reward", default: 1
+    t.integer "reward_points", default: 1
+    t.string "time_limit_modes"
+    t.integer "daily_max_executions"
+    t.integer "per_window_max_executions"
+    t.json "custom_windows"
     t.index ["category_id"], name: "index_point_activities_on_category_id"
     t.index ["parent_id"], name: "index_point_activities_on_parent_id"
     t.index ["service_id"], name: "index_point_activities_on_service_id"
@@ -157,6 +215,28 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.index ["point_activity_id"], name: "index_point_activity_targets_on_point_activity_id"
   end
 
+  create_table "point_import_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "point_import_id", null: false
+    t.bigint "point_activity_id", null: false
+    t.string "category_name"
+    t.string "description"
+    t.integer "points"
+    t.boolean "confirmed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["point_activity_id"], name: "index_point_import_items_on_point_activity_id"
+    t.index ["point_import_id"], name: "index_point_import_items_on_point_import_id"
+  end
+
+  create_table "point_imports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "status"
+    t.json "raw_result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_point_imports_on_user_id"
+  end
+
   create_table "push_subscriptions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "endpoint"
     t.string "p256dh"
@@ -174,6 +254,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.string "official_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "recommended_points"
+    t.string "icon"
     t.index ["code"], name: "index_services_on_code", unique: true
   end
 
@@ -217,10 +299,17 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
     t.string "google_calendar_id"
+    t.integer "selected_course"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_executions", "point_activities"
+  add_foreign_key "activity_executions", "users"
+  add_foreign_key "activity_logs", "point_activities"
+  add_foreign_key "activity_logs", "users"
   add_foreign_key "activity_schedules", "point_activities"
   add_foreign_key "ai_advices", "users"
   add_foreign_key "daily_tasks", "point_activities"
@@ -232,6 +321,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_144001) do
   add_foreign_key "point_activities", "services"
   add_foreign_key "point_activity_gets", "point_activities"
   add_foreign_key "point_activity_targets", "point_activities"
+  add_foreign_key "point_import_items", "point_activities"
+  add_foreign_key "point_import_items", "point_imports"
+  add_foreign_key "point_imports", "users"
   add_foreign_key "push_subscriptions", "users"
   add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"

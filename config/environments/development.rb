@@ -2,6 +2,16 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  
+  # Load environment variables from .env file manually if it exists
+  dot_env_file = Rails.root.join(".env")
+  if File.exist?(dot_env_file)
+    File.readlines(dot_env_file).each do |line|
+      next if line.strip.empty? || line.start_with?("#")
+      key, value = line.strip.split('=', 2)
+      ENV[key] = value if key && value
+    end
+  end
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development

@@ -1,6 +1,7 @@
   <!-- Greeting & Summary Card -->
   <div id="achievement_notifications"></div>
   
+  <%= render "shared/line_link_banner" %>
   <div class="glass-card mb-4 animate-entrance" style="animation-delay: 0.1s;">
     <div class="d-flex justify-content-between align-items-start mb-3">
       <div>
@@ -8,285 +9,356 @@
           <span class="me-2"><%= @greeting_emoji %> <%= @greeting %></span>
           <span><%= @today_date.strftime("%-m月%-d日") %>のポイ活状況を確認しましょう！！</span>
         </h2>
-        <div class="d-flex flex-wrap gap-4 mt-2">
-          <p class="text-secondary fw-bold mb-0 fs-5">
-            <i class="bi bi-flag-fill me-1 text-primary"></i>今月の目標: <span class="text-primary"><%= number_with_delimiter(@target_points) %></span> <small class="small">pt</small>
-          </p>
-          <p class="text-secondary fw-bold mb-0 fs-5">
-            <i class="bi bi-graph-up-arrow me-1 text-primary"></i>今月の獲得ポイント: <span class="text-primary"><%= number_with_delimiter(@month_points) %></span> <small class="small">pt</small>
-          </p>
-          <p class="text-secondary fw-bold mb-0 fs-5">
-            <i class="bi bi-calendar-event me-1 text-primary"></i>今日の獲得ポイント: <span class="text-primary"><%= number_with_delimiter(@today_points) %></span> <small class="small">pt</small>
-          </p>
-        </div>
+        <% if @has_today_event %>
+          <div class="event-badge animate-entrance">
+            <i class="bi bi-calendar-event-fill"></i>
+            今日は「<%= @event_message %>」の日です！🚀
+          </div>
+        <% end %>
       </div>
       
       <% unless current_user.line_profile.present? %>
-        <%= button_to user_line_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold extra-small d-flex align-items-center" do %>
-          <i class="bi bi-line me-1 fs-6"></i>LINEと連携
-        <% end %>
-      <% end %>
-    </div>
-    
-    <div class="mb-3">
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="small font-weight-bold text-gradient">今月の達成度</span>
-        <span class="small font-weight-bold text-gradient"><%= @month_achievement_percent %>%</span>
-      </div>
-      <div class="progress rounded-pill bg-light" style="height: 8px;">
-        <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: <%= @month_achievement_percent %>%"></div>
-      </div>
-    </div>
-
-    <div>
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <span class="small font-weight-bold text-gradient">今日のペース（対目標平均）</span>
-        <span class="small font-weight-bold text-gradient"><%= @today_pace_percent %>%</span>
-      </div>
-      <div class="progress rounded-pill bg-light" style="height: 8px;">
-        <div class="progress-bar bg-info rounded-pill" role="progressbar" style="width: <%= [@today_pace_percent, 100].min %>%"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🤖 AIポイ活アドバイザー（執事） -->
-  <% if @latest_ai_advice.present? %>
-    <div class="glass-card mb-4 animate-entrance border-primary border-opacity-25" style="animation-delay: 0.15s; background: rgba(99, 102, 241, 0.05) !important;">
-      <div class="d-flex align-items-start">
-        <div class="me-3 mt-1">
-          <div class="rounded-circle bg-white d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; border: 2px solid #6366f1;">
-            <i class="bi bi-person-workspace text-primary fs-4"></i>
-          </div>
+        <div class="ms-3">
+          <%= button_to user_line_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold extra-small d-flex align-items-center" do %>
+            <i class="bi bi-line me-1 fs-6"></i>LINEと連携
+          <% end %>
         </div>
-        <div class="flex-grow-1">
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <h3 class="h6 fw-bold mb-0 text-primary">AIポイ活アドバイザー（執事）</h3>
-            <span class="extra-small text-secondary"><%= @latest_ai_advice.generated_at.strftime("%-m/%-d %H:%M") %></span>
-          </div>
-          <div class="text-dark small leading-relaxed" style="white-space: pre-wrap;"><%= @latest_ai_advice.content %></div>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="hero-cta animate-entrance" style="animation-delay: 0.2s;">
-    <div class="position-absolute" style="top: 10px; right: 15px; opacity: 0.2; font-size: 4rem;">
-      <i class="bi bi-rocket-takeoff text-white"></i>
-    </div>
-    <div class="position-relative z-1">
-      <h3 class="h4 text-white fw-bold mb-3">今日の成果を記録して、データ化しましょう！</h3>
-      <p class="text-white-50 small mb-4">継続は力なり。今日の頑張りをしっかりと残しましょう。</p>
-      <%= link_to point_activity_targets_path, class: "btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold text-primary shadow-lg border-0" do %>
-        <i class="bi bi-pencil-square me-2"></i>成果を登録しにいく
       <% end %>
     </div>
   </div>
 
-  <!-- フローティング登録ボタン -->
-  <%= link_to point_activity_targets_path, class: "btn-fab animate-entrance", style: "animation-delay: 1s;", id: "fab-register" do %>
-    <i class="bi bi-plus-lg"></i>
-  <% end %>
+  <!-- 📺 Rチャンネル 視聴タイマー (細長いカード) -->
+  <div class="glass-card mb-4 py-3 px-4 animate-entrance shadow-sm" 
+       style="animation-delay: 0.15s; border-left: 5px solid #ed1c24;"
+       data-controller="r-channel-timer"
+       data-r-channel-timer-activity-id-value="188">
+    <div class="row align-items-center g-3">
+      <div class="col-12 col-md-4">
+        <div class="d-flex flex-column">
+          <span class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">R チャンネルで動画視聴！！</span>
+          <span class="extra-small text-secondary fw-bold">3時間を超えないように活用してください！</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-5">
+        <div class="d-flex align-items-center gap-3">
+          <div class="flex-grow-1">
+            <div class="progress rounded-pill bg-light" style="height: 8px;">
+              <div class="progress-bar bg-danger rounded-pill" 
+                   data-r-channel-timer-target="progress"
+                   role="progressbar" style="width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+          <span class="fw-mono fw-bold text-dark h6 mb-0" data-r-channel-timer-target="display" style="min-width: 80px;">03:00:00</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-3 text-end">
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-danger rounded-pill px-4 py-2 fw-bold extra-small shadow-sm" 
+                  data-action="click->r-channel-timer#start" 
+                  data-r-channel-timer-target="startButton">
+            START
+          </button>
+          <button class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-bold extra-small d-none" 
+                  data-action="click->r-channel-timer#pause" 
+                  data-r-channel-timer-target="pauseButton">
+            PAUSE
+          </button>
+          <button class="btn btn-light border rounded-pill px-4 py-2 fw-bold extra-small" 
+                  data-action="click->r-channel-timer#reset">
+            RESET
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🚀 ヒーローセクション: ストリーク & バーンアップチャート -->
+  <div class="row g-4 mb-4 animate-entrance" style="animation-delay: 0.2s;">
+    <!-- 左側: 連続達成記録 -->
+    <div class="col-12 col-lg-6">
+      <div class="glass-card h-100 profile-streak-hero d-flex flex-column justify-content-center p-4">
+        <div class="row align-items-center mb-4">
+          <div class="col-12 col-sm-5 text-center mb-3 mb-sm-0">
+            <div class="position-relative d-inline-block">
+              <div class="streak-circle-large m-auto d-flex align-items-center justify-content-center">
+                <div class="text-center">
+                  <span class="display-3 fw-bold text-gradient d-block" id="streak_count_hero"><%= @user_streak.current_streak %></span>
+                  <span class="extra-small text-secondary fw-bold">DAYS</span>
+                </div>
+              </div>
+              <div class="position-absolute top-0 end-0 translate-middle">
+                <i class="bi bi-fire text-danger fs-2 animate-pulse"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-7 text-center text-sm-start">
+            <h3 class="h5 fw-bold mb-2">継続は力なり！🚀</h3>
+            <p class="text-secondary extra-small mb-3">
+              現在 <span class="text-primary fw-bold"><%= @user_streak.current_streak %>日連続</span> で<br class="d-none d-lg-inline">ポイ活を達成中です。
+            </p>
+            
+            <div class="d-flex justify-content-center justify-content-sm-start gap-4 pt-3 border-top border-opacity-10">
+              <div class="text-center text-sm-start">
+                <p class="extra-small text-secondary mb-0 opacity-75">
+                  <i class="bi bi-trophy-fill text-warning me-1"></i>最高記録
+                </p>
+                <p class="h6 fw-bold mb-0"><%= @user_streak.longest_streak || 0 %>日</p>
+              </div>
+              <div class="text-center text-sm-start">
+                <p class="extra-small text-secondary mb-0 opacity-75">
+                  <i class="bi bi-calendar-check-fill text-success me-1"></i>今月の完了
+                </p>
+                <p class="h6 fw-bold mb-0"><%= @month_executions_count %>回</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右側: バーンアップチャート -->
+    <div class="col-12 col-lg-6">
+      <div class="glass-card h-100 p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h3 class="h6 fw-bold mb-1"><i class="bi bi-graph-up-arrow text-primary me-2"></i>今月のバーンアップチャート！</h3>
+            <p class="extra-small text-secondary mb-0">目標までの達成状況を確認しましょう</p>
+          </div>
+          <div class="text-end">
+            <span class="badge rounded-pill px-3 py-2 fw-bold shadow-sm" style="background: var(--accent-gradient); color: white; font-size: 0.85rem;">
+              <%= number_with_delimiter(@month_points) %> pt
+            </span>
+          </div>
+        </div>
+        
+        <div style="height: 220px; width: 100%;">
+          <%= line_chart @burnup_chart_data, 
+                height: "220px",
+                suffix: "pt",
+                thousands: ",",
+                library: {
+                  plugins: {
+                    legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                  },
+                  scales: {
+                    y: { ticks: { font: { size: 10 } } },
+                    x: { ticks: { font: { size: 10 } } }
+                  },
+                  elements: {
+                    point: { radius: 0, hoverRadius: 5 },
+                    line: { tension: 0.3, borderWidth: 2 }
+                  }
+                } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
   <!-- Month Progress & Streaks -->
   <div class="row g-3">
-    <div class="col-12 col-md-4 animate-entrance" style="animation-delay: 0.5s;">
-      <div class="glass-card h-100 d-flex flex-column justify-content-between" id="monthly_achievement_card_top">
-        <h3 class="h6 font-weight-bold mb-3"><i class="bi bi-pie-chart-fill text-primary me-2"></i>あなたのポイ活利用率(TOP5)</h3>
-        <div style="position: relative;">
-          <%= pie_chart @activity_usage_data_top, 
-                donut: true, 
-                height: "200px",
-                colors: @chart_colors, 
-                legend: "bottom",
-                library: { 
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  cutout: "70%",
-                  plugins: {
-                    legend: {
-                      display: true,
-                      position: 'bottom',
-                      labels: {
-                        usePointStyle: true,
-                        padding: 15,
-                        font: { size: 10 }
-                      }
-                    },
-                    tooltip: { enabled: true }
-                  }
-                } %>
-          <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-            <p class="h5 font-weight-bold mb-0 text-gradient"><%= @month_points_top %></p>
-            <p class="extra-small text-secondary mb-0">Total pt</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 📉 ポイ活利用率(下位) -->
-    <div class="col-12 col-md-4 animate-entrance" style="animation-delay: 0.55s;">
-      <div class="glass-card h-100 d-flex flex-column justify-content-between" id="monthly_achievement_card_low">
-        <h3 class="h6 font-weight-bold mb-3"><i class="bi bi-pie-chart-fill text-secondary me-2"></i>あなたのポイ活利用率(下位)</h3>
-        <div style="position: relative;">
-          <% if @activity_usage_data_low.any? %>
-            <%= pie_chart @activity_usage_data_low, 
-                  donut: true, 
-                  height: "200px",
-                  colors: ["#94a3b8", "#cbd5e1", "#e2e8f0"], 
-                  legend: "bottom",
-                  library: { 
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: "70%",
-                    plugins: {
-                      legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                          usePointStyle: true,
-                          padding: 15,
-                          font: { size: 10 }
-                        }
-                      }
-                    }
-                  } %>
-            <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-              <p class="h5 font-weight-bold mb-0 text-secondary"><%= @month_points_low %></p>
-              <p class="extra-small text-secondary mb-0">Total pt</p>
+    <div class="col-12 col-md-6 animate-entrance" style="animation-delay: 0.5s;">
+      <div class="glass-card h-100" id="daily_execution_card_top">
+        <h3 class="h6 font-weight-bold mb-3"><i class="bi bi-list-check text-primary me-2"></i>今日のポイ活完了内訳</h3>
+        <div class="mt-2">
+          <% if @today_execution_totals.any? %>
+            <div class="d-flex flex-column gap-2">
+              <% @today_execution_totals.each do |name, count| %>
+                <div class="d-flex justify-content-between align-items-center p-3 rounded-4 border border-primary border-opacity-10 shadow-sm" 
+                     style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(4px);">
+                  <div class="d-flex align-items-center">
+                    <div class="count-bullet me-3"></div>
+                    <span class="small fw-bold text-dark text-truncate" style="max-width: 180px;"><%= name %></span>
+                  </div>
+                  <div class="d-flex align-items-baseline">
+                    <span class="h4 fw-bold text-vibrant mb-0 me-1"><%= count %></span>
+                    <span class="extra-small text-secondary fw-bold">回</span>
+                  </div>
+                </div>
+              <% end %>
             </div>
+            
+            <style>
+              .count-bullet {
+                width: 6px;
+                height: 6px;
+                background: var(--accent-gradient);
+                border-radius: 50%;
+                box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+              }
+              .text-vibrant {
+                background: var(--accent-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              }
+            </style>
           <% else %>
-            <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
-              <p class="text-secondary small">下位項目はありません</p>
+            <div class="text-center py-4 opacity-50">
+              <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+              <p class="text-secondary small mb-0">今日の記録はまだありません</p>
             </div>
           <% end %>
         </div>
       </div>
     </div>
-    
-    <div class="col-12 col-md-4 animate-entrance" style="animation-delay: 0.6s;">
-      <div class="glass-card h-100 d-flex flex-column justify-content-center text-center py-4">
-        <h3 class="h6 font-weight-bold mb-4">
-          <i class="bi bi-fire text-danger me-2"></i>連続達成記録
-        </h3>
-        
-        <div class="position-relative mb-3">
-          <div class="streak-circle m-auto d-flex align-items-center justify-content-center">
-            <div class="text-center">
-              <span class="display-3 font-weight-bold text-gradient d-block" id="streak_count"><%= @user_streak.current_streak %></span>
-              <span class="small text-secondary fw-bold">DAYS STREAK</span>
-            </div>
-          </div>
-        </div>
 
-        <div class="mt-2">
-          <p class="text-secondary small mb-0 opacity-75">
-            <i class="bi bi-trophy-fill text-warning me-1"></i>
-            最高記録: <%= @user_streak.longest_streak || 0 %>日
-          </p>
+    <div class="col-12 col-md-6 animate-entrance" style="animation-delay: 0.6s;">
+      <div class="glass-card h-100 d-flex flex-column" id="decreased_card">
+        <h3 class="h6 font-weight-bold mb-3"><i class="bi bi-graph-down-arrow text-danger me-2"></i>前日より少ない項目</h3>
+        <div>
+          <% if @decreased_activities.any? %>
+            <div class="d-flex flex-column gap-2">
+              <% @decreased_activities.each do |data| %>
+                <div class="d-flex justify-content-between align-items-center p-3 rounded-4 border border-danger border-opacity-10 shadow-sm" 
+                     style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(4px);">
+                  <div class="d-flex align-items-center">
+                    <div class="decreased-bullet me-3"></div>
+                    <span class="small fw-bold text-dark text-truncate" style="max-width: 180px;"><%= data[:item] %></span>
+                  </div>
+                  <div class="d-flex align-items-baseline">
+                    <span class="h4 fw-bold text-danger mb-0 me-1">-<%= data[:diff] %></span>
+                    <span class="extra-small text-secondary fw-bold">回</span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            
+            <style>
+              .decreased-bullet {
+                width: 6px;
+                height: 6px;
+                background: #ef4444;
+                border-radius: 50%;
+                box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+              }
+            </style>
+          <% else %>
+            <div class="text-center py-4 opacity-75">
+              <i class="bi bi-check-circle-fill text-success fs-2 d-block mb-2"></i>
+              <p class="text-secondary small mb-0 fw-bold">すべて順調です！✨</p>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 📊 ポイント推移グラフ -->
-  <div class="glass-card mt-4 animate-entrance" style="animation-delay: 0.7s;" data-controller="dashboard-chart">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+
+  <!-- 🏆 オススメ攻略記事 -->
+  <% if @strategy_activities.any? %>
+  <div id="strategy_section" class="glass-card mt-4 animate-entrance mb-4" style="animation-delay: 0.8s;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="h6 font-weight-bold mb-0">
-        <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>ポイント獲得推移
+        <i class="bi bi-journal-check text-primary me-2"></i>オススメ攻略記事
       </h3>
-      <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-sm rounded-pill px-3 chart-toggle active" data-action="click->dashboard-chart#toggleDaily" data-dashboard-chart-target="btnDaily">日別</button>
-        <button type="button" class="btn btn-sm rounded-pill px-3 ms-1 chart-toggle" data-action="click->dashboard-chart#toggleWeekly" data-dashboard-chart-target="btnWeekly">週別</button>
-      </div>
+      <span class="badge bg-primary bg-opacity-10 text-primary extra-small px-3 rounded-pill">UPDATE</span>
     </div>
-    <div id="chart-daily" data-dashboard-chart-target="dailyChart">
-      <%= line_chart @daily_chart_data,
-            height: "200px",
-            colors: ["#6366f1"],
-            curve: false,
-            points: true,
-            library: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                x: { ticks: { maxTicksLimit: 7 } }
-              },
-              plugins: {
-                legend: { display: false }
-              },
-              elements: {
-                point: { radius: 5, hoverRadius: 7 },
-                line: { tension: 0, borderWidth: 2 }
-              }
-            } %>
-    </div>
-    <div id="chart-weekly" style="display: none;" data-dashboard-chart-target="weeklyChart">
-      <%= line_chart @weekly_chart_data,
-            height: "200px",
-            colors: ["#ec4899"],
-            curve: false,
-            points: true,
-            library: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                x: { ticks: { maxTicksLimit: 6 } }
-              },
-              plugins: {
-                legend: { display: false }
-              },
-              elements: {
-                point: { radius: 5, hoverRadius: 7 },
-                line: { tension: 0, borderWidth: 2 }
-              }
-            } %>
-    </div>
-  </div>
-
-  <!-- 🏆 注目のオススメ活動 -->
-  <% if @recommended_activities.any? %>
-  <div class="glass-card mt-4 animate-entrance mb-4" style="animation-delay: 0.8s;">
-    <h3 class="h6 font-weight-bold mb-3">
-      <i class="bi bi-star-fill text-warning me-2"></i>注目のオススメ活動
-    </h3>
     <div class="row g-3">
-      <% @recommended_activities.each_with_index do |activity, index| %>
+      <% @strategy_activities.each_with_index do |activity, index| %>
         <div class="col-12">
-          <div class="d-flex align-items-center p-3 rounded-4" style="background: rgba(99, 102, 241, <%= 0.08 - (index * 0.02) %>); border: 1px solid rgba(99, 102, 241, 0.1);">
-            <div class="d-flex align-items-center justify-content-center rounded-circle me-3" style="width: 36px; height: 36px; background: var(--accent-gradient); flex-shrink: 0;">
-              <span class="text-white fw-bold small"><%= index + 1 %></span>
-            </div>
-            <div class="flex-grow-1">
-              <p class="mb-0 fw-bold small">
-                <%= activity.major_item %>
-                <% if activity.platform.present? %>
-                  <span class="badge bg-light text-secondary border extra-small ms-1"><%= activity.platform %></span>
-                <% end %>
-              </p>
-              <p class="mb-0 text-secondary extra-small">
-                <%= activity.service.name %>
-              </p>
-            </div>
-            <div class="text-end">
-              <div class="text-warning small">
-                <% (activity.recommendation_level || 1).times do %>
-                  <i class="bi bi-star-fill"></i>
-                <% end %>
-                <% (3 - (activity.recommendation_level || 1)).times do %>
-                  <i class="bi bi-star text-muted opacity-25"></i>
-                <% end %>
+          <%= link_to activity.strategy_url, target: "_blank", class: "text-decoration-none" do %>
+            <div class="strategy-card-premium d-flex align-items-center p-3 rounded-4">
+              <div class="strategy-icon-box me-3">
+                <i class="bi bi-book-half text-white"></i>
               </div>
-              <span class="text-secondary extra-small d-block mt-1"><%= activity.frequency %></span>
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="badge-vibrant-sm">攻略</span>
+                  <p class="mb-0 fw-bold text-dark" style="font-size: 0.95rem;">
+                    <%= activity.major_item %> の攻略方法
+                  </p>
+                </div>
+                <p class="mb-0 text-secondary extra-small d-flex align-items-center">
+                   <i class="bi bi-link-45deg me-1"></i><%= activity.service.name %> • 外部サイトへ
+                </p>
+              </div>
+              <div class="text-end ms-2">
+                <div class="arrow-circle">
+                  <i class="bi bi-arrow-right-short fs-4 text-white"></i>
+                </div>
+              </div>
             </div>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>
   </div>
   <% end %>
+
+  <style>
+    .strategy-card-premium {
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      backdrop-filter: blur(8px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .strategy-card-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-gradient);
+      opacity: 0.7;
+    }
+
+    .strategy-card-premium:hover {
+      transform: translateX(8px) translateY(-4px);
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 15px 35px rgba(99, 102, 241, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .strategy-icon-box {
+      width: 48px;
+      height: 48px;
+      background: var(--accent-gradient);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 8px 15px rgba(99, 102, 241, 0.25);
+      transition: transform 0.3s ease;
+    }
+
+    .strategy-card-premium:hover .strategy-icon-box {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .badge-vibrant-sm {
+      background: var(--accent-gradient);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .arrow-circle {
+      width: 32px;
+      height: 32px;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .strategy-card-premium:hover .arrow-circle {
+      background: var(--accent-primary);
+      transform: rotate(-45deg);
+    }
+  </style>
 
   <!-- 🏆 実績コレクション -->
   <div class="glass-card mt-4 animate-entrance mb-5" style="animation-delay: 0.9s;">
@@ -360,6 +432,31 @@
       color: var(--accent-primary) !important;
     }
   </style>
+
+  <!-- ① 初回ログイン時の目標確認モーダル -->
+  <div data-controller="daily-goal-modal"
+       data-daily-goal-modal-yesterday-points-value="<%= @yesterday_points %>"
+       data-daily-goal-modal-targets-url-value="<%= point_activity_targets_path %>">
+    <div class="glass-modal-overlay" data-daily-goal-modal-target="overlay" style="display: none;">
+      <div class="glass-modal">
+        <span class="glass-modal__icon">🎯</span>
+        <h3 class="glass-modal__title">今日の目標、忘れていませんか？</h3>
+        <div class="glass-modal__stat">
+          昨日の獲得ポイント: <strong><%= number_with_delimiter(@yesterday_points) %></strong> pt
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-vibrant rounded-pill py-3 fw-bold" 
+                  data-action="click->daily-goal-modal#confirm">
+            確認する
+          </button>
+          <button class="btn btn-link text-secondary" 
+                  data-action="click->daily-goal-modal#dismiss">
+            あとで
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 
