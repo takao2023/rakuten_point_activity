@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg glass-header sticky-top">
   <div class="container-fluid px-3">
     <div class="d-flex align-items-center">
-      <%= link_to root_path, class: "navbar-brand d-flex align-items-center" do %>
+      <%= link_to (user_signed_in? ? dashboards_path : root_path), class: "navbar-brand d-flex align-items-center" do %>
         <div class="logo-p me-3">
           <span>P</span>
         </div>
-        <span class="text-white fw-bold fs-4">楽天ポイ活マネジメント</span>
+        <span class="text-white fw-bold fs-4">楽ポイ活マネジメント</span>
       <% end %>
     </div>
 
@@ -17,13 +17,18 @@
       <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 pt-2 pb-3 pt-lg-0 pb-lg-0 align-items-lg-center">
           <li class="nav-item">
-            <%= link_to point_activity_targets_path, class: "nav-link text-white py-2 px-3", data: { turbo: false } do %>
-              <i class="bi bi-list-task me-2"></i>今月の進捗一覧
+            <%= link_to courses_path, class: "nav-link text-white py-2 px-3", data: { turbo: false } do %>
+              <i class="bi bi-compass me-2"></i>コース選択
             <% end %>
           </li>
           <li class="nav-item">
-            <%= link_to new_point_activity_target_path, class: "nav-link text-white py-2 px-3", data: { turbo: false } do %>
-              <i class="bi bi-plus-circle me-2"></i>ポイ活一覧
+            <%= link_to report_point_activity_targets_path, class: "nav-link text-white py-2 px-3", data: { turbo: false } do %>
+              <i class="bi bi-check2-square me-2"></i>完了報告
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to point_activity_targets_path, class: "nav-link text-white py-2 px-3", data: { turbo: false } do %>
+              <i class="bi bi-bar-chart-line me-2"></i>進捗確認
             <% end %>
           </li>
           <li class="nav-item">

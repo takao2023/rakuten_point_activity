@@ -1,0 +1,398 @@
+<!-- ランディングページ: 未ログインユーザー向け -->
+
+<!-- ===== セクション① ヒーロー ===== -->
+<section class="lp-hero d-flex align-items-center justify-content-center text-center text-white position-relative overflow-hidden">
+  <div class="lp-hero-particles" id="heroParticles"></div>
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="animate-entrance">
+      <div class="lp-badge mb-4">
+        <i class="bi bi-stars me-2"></i>習慣化コンサル × ポイ活
+      </div>
+      <h1 class="lp-hero-title mb-4">
+        買い物に頼らない、<br>
+        <span class="lp-highlight">毎日のポイ活</span>を<br class="d-md-none">習慣にする。
+      </h1>
+      <p class="lp-hero-sub mb-5">
+        ポイ活は「頑張るもの」ではなく、「生活の一部」にするもの。<br class="d-none d-md-block">
+        あなたの日常に寄り添い、習慣化を伴走するサービスです。
+      </p>
+      <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+        <%= link_to new_user_session_path, class: "btn lp-btn-primary px-5 py-3 fw-bold" do %>
+          <i class="bi bi-rocket-takeoff me-2"></i>無料で始めてみる
+        <% end %>
+        <a href="#lp-philosophy" class="btn lp-btn-outline px-5 py-3 fw-bold">
+          <i class="bi bi-arrow-down-circle me-2"></i>もっと詳しく
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="lp-hero-wave">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,30 1440,60 L1440,120 L0,120 Z" fill="var(--bg-primary)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== セクション② 哲学（Why） ===== -->
+<section class="lp-section" id="lp-philosophy">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-lightbulb me-1"></i>Philosophy</span>
+      <h2 class="lp-section-title">ポイ活は、<span class="text-gradient">生活の一部</span>にすることに意味がある</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="lp-philosophy-card glass-card text-center h-100 animate-entrance" style="animation-delay: 0.1s;">
+          <div class="lp-icon-circle mb-3 mx-auto"><i class="bi bi-heart-pulse fs-2"></i></div>
+          <h4 class="h6 fw-bold mb-2">無理をしない</h4>
+          <p class="small text-secondary mb-0">ポイ活は義務ではなく、生活に自然に溶け込むもの。<br>「ながら」でこなせる範囲で十分です。</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="lp-philosophy-card glass-card text-center h-100 animate-entrance" style="animation-delay: 0.2s;">
+          <div class="lp-icon-circle mb-3 mx-auto"><i class="bi bi-arrow-repeat fs-2"></i></div>
+          <h4 class="h6 fw-bold mb-2">習慣の力を使う</h4>
+          <p class="small text-secondary mb-0">毎日の歯磨きのように、意識せず続けられる状態が理想。<br>仕組みで続く環境をつくります。</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="lp-philosophy-card glass-card text-center h-100 animate-entrance" style="animation-delay: 0.3s;">
+          <div class="lp-icon-circle mb-3 mx-auto"><i class="bi bi-people fs-2"></i></div>
+          <h4 class="h6 fw-bold mb-2">伴走する存在</h4>
+          <p class="small text-secondary mb-0">一人で続けるのは難しい。<br>習慣化コンサルとして、リマインドと分析で寄り添います。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション③ 習慣化の壁 ===== -->
+<section class="lp-section lp-section-dark">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-exclamation-triangle me-1"></i>Problem</span>
+      <h2 class="lp-section-title text-white">「目的のない習慣化」は<span class="lp-highlight">ほぼ挫折</span>する</h2>
+    </div>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5 text-center animate-entrance" style="animation-delay: 0.1s;">
+        <div class="lp-stat-circle mx-auto">
+          <span class="lp-stat-number" data-count="92">0</span>
+          <span class="lp-stat-unit">%</span>
+          <p class="lp-stat-label">が途中で挫折</p>
+        </div>
+        <p class="small text-white-50 mt-3">※ 新しい習慣を身につけようとした人の一般的な挫折率</p>
+      </div>
+      <div class="col-lg-7 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="lp-problem-list">
+          <div class="lp-problem-item">
+            <i class="bi bi-x-circle-fill text-danger me-3 fs-5"></i>
+            <div>
+              <strong>「なんとなく始めた」習慣</strong>
+              <p class="small text-white-50 mb-0">明確な理由がないと、3日で忘れてしまう</p>
+            </div>
+          </div>
+          <div class="lp-problem-item">
+            <i class="bi bi-x-circle-fill text-danger me-3 fs-5"></i>
+            <div>
+              <strong>成果が見えにくい</strong>
+              <p class="small text-white-50 mb-0">「続けて何になるの？」と思った時点で終わる</p>
+            </div>
+          </div>
+          <div class="lp-problem-item">
+            <i class="bi bi-x-circle-fill text-danger me-3 fs-5"></i>
+            <div>
+              <strong>リマインドがない</strong>
+              <p class="small text-white-50 mb-0">忙しい日々の中で、新しい行動は簡単に埋もれる</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション④ 解決策 ===== -->
+<section class="lp-section">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-check-circle me-1"></i>Solution</span>
+      <h2 class="lp-section-title">「買い物に頼らないポイ活」が<br><span class="text-gradient">習慣化の"目的"</span>になる</h2>
+    </div>
+    <div class="row g-4 align-items-stretch">
+      <div class="col-md-6 animate-entrance" style="animation-delay: 0.1s;">
+        <div class="lp-comparison-card lp-comparison-before h-100">
+          <div class="lp-comparison-header">
+            <i class="bi bi-emoji-frown me-2"></i>Before
+          </div>
+          <ul class="lp-comparison-list">
+            <li><i class="bi bi-dash-circle text-secondary me-2"></i>目的がなく、続かない</li>
+            <li><i class="bi bi-dash-circle text-secondary me-2"></i>「結局何も変わらなかった」</li>
+            <li><i class="bi bi-dash-circle text-secondary me-2"></i>やっている実感がない</li>
+            <li><i class="bi bi-dash-circle text-secondary me-2"></i>一人で孤独に取り組む</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="lp-comparison-card lp-comparison-after h-100">
+          <div class="lp-comparison-header">
+            <i class="bi bi-emoji-smile me-2"></i>After
+          </div>
+          <ul class="lp-comparison-list">
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>毎月数千円分のポイントが目的</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>数字で成果が見える</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>朝のルーティンに組み込める</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>リマインドと分析で伴走される</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション⑤ 習慣スタッキング ===== -->
+<section class="lp-section lp-section-accent">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label text-white"><i class="bi bi-layers me-1"></i>Habit Stacking</span>
+      <h2 class="lp-section-title text-white">既存の習慣に<span class="lp-highlight-light">ポイ活を重ねる</span></h2>
+      <p class="text-white-50">すでにやっていることの「ついでに」。それが最も自然な習慣化です。</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4 animate-entrance" style="animation-delay: 0.1s;">
+        <div class="lp-stack-card">
+          <div class="lp-stack-trigger">☕ 朝のコーヒー</div>
+          <div class="lp-stack-arrow"><i class="bi bi-plus-lg"></i></div>
+          <div class="lp-stack-action">楽天ウェブ検索<br><span class="extra-small text-secondary">約3分</span></div>
+        </div>
+      </div>
+      <div class="col-md-4 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="lp-stack-card">
+          <div class="lp-stack-trigger">🚃 通勤電車</div>
+          <div class="lp-stack-arrow"><i class="bi bi-plus-lg"></i></div>
+          <div class="lp-stack-action">ポイントスクリーン<br><span class="extra-small text-secondary">約2分</span></div>
+        </div>
+      </div>
+      <div class="col-md-4 animate-entrance" style="animation-delay: 0.3s;">
+        <div class="lp-stack-card">
+          <div class="lp-stack-trigger">🌙 就寝前のひととき</div>
+          <div class="lp-stack-arrow"><i class="bi bi-plus-lg"></i></div>
+          <div class="lp-stack-action">ドリームくじ<br><span class="extra-small text-secondary">約1分</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション⑥ 経済的メリット ===== -->
+<section class="lp-section">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-graph-up-arrow me-1"></i>Value</span>
+      <h2 class="lp-section-title">インフレ時代に、<span class="text-gradient">月数千ポイント</span>の価値</h2>
+    </div>
+    <div class="row g-4 justify-content-center text-center">
+      <div class="col-6 col-md-3 animate-entrance" style="animation-delay: 0.1s;">
+        <div class="glass-card lp-value-card h-100">
+          <div class="lp-countup h2 fw-bold text-gradient mb-1" data-target="3000">0</div>
+          <p class="extra-small text-secondary mb-0">月の獲得ポイント目安<br>(中級者コース)</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="glass-card lp-value-card h-100">
+          <div class="lp-countup h2 fw-bold text-gradient mb-1" data-target="36000">0</div>
+          <p class="extra-small text-secondary mb-0">年間の換算額<br>(1pt = 1円)</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 animate-entrance" style="animation-delay: 0.3s;">
+        <div class="glass-card lp-value-card h-100">
+          <div class="h2 fw-bold text-gradient mb-1">0<span class="h5">円</span></div>
+          <p class="extra-small text-secondary mb-0">買い物に必要な金額<br>(お金を使わずに貯まる)</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 animate-entrance" style="animation-delay: 0.4s;">
+        <div class="glass-card lp-value-card h-100">
+          <div class="h2 fw-bold text-gradient mb-1">〜15<span class="h5">分/日</span></div>
+          <p class="extra-small text-secondary mb-0">1日に必要な時間<br>(スキマ時間で十分)</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4 animate-entrance" style="animation-delay: 0.5s;">
+      <p class="text-secondary small">
+        <i class="bi bi-info-circle me-1"></i>
+        生活コストが年々上がるいま、「使わずに貯まるポイント」は家計の強い味方になります。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション⑦ 伴走サポート（機能紹介） ===== -->
+<section class="lp-section lp-section-dark">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-gear me-1"></i>Features</span>
+      <h2 class="lp-section-title text-white">習慣化コンサルとして、<span class="lp-highlight">伴走</span>します</h2>
+      <p class="text-white-50">ツールではなく、あなたの習慣を一緒に育てるパートナーです。</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 animate-entrance" style="animation-delay: 0.1s;">
+        <div class="lp-feature-card h-100">
+          <div class="lp-feature-icon"><i class="bi bi-bell"></i></div>
+          <h5 class="fw-bold mb-2">スマートリマインド</h5>
+          <p class="small text-white-50 mb-0">コースに応じた最適なタイミングで、LINEやブラウザに通知をお届け。忘れない仕組みをつくります。</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="lp-feature-card h-100">
+          <div class="lp-feature-icon"><i class="bi bi-bar-chart-line"></i></div>
+          <h5 class="fw-bold mb-2">進捗ダッシュボード</h5>
+          <p class="small text-white-50 mb-0">獲得ポイントの推移、バーンアップチャート、目標達成率をリアルタイムで可視化します。</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 animate-entrance" style="animation-delay: 0.3s;">
+        <div class="lp-feature-card h-100">
+          <div class="lp-feature-icon"><i class="bi bi-robot"></i></div>
+          <h5 class="fw-bold mb-2">AI攻略アドバイス</h5>
+          <p class="small text-white-50 mb-0">あなたの実績データを分析し、最も効率的なポイ活ルートをAIが提案します。</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 animate-entrance" style="animation-delay: 0.4s;">
+        <div class="lp-feature-card h-100">
+          <div class="lp-feature-icon"><i class="bi bi-trophy"></i></div>
+          <h5 class="fw-bold mb-2">実績バッジ</h5>
+          <p class="small text-white-50 mb-0">連続達成や目標クリアでバッジを獲得。ゲーム感覚でモチベーションを維持します。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション⑧ コース紹介 ===== -->
+<section class="lp-section">
+  <div class="container">
+    <div class="text-center mb-5 animate-entrance">
+      <span class="lp-section-label"><i class="bi bi-compass me-1"></i>Courses</span>
+      <h2 class="lp-section-title">あなたに合った<span class="text-gradient">コース</span>を選べます</h2>
+      <p class="text-secondary small">ライフスタイルや経験に合わせて、4段階のコースをご用意しています。</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-6 col-lg-3 animate-entrance" style="animation-delay: 0.1s;">
+        <div class="lp-course-card h-100 text-center">
+          <div class="lp-course-emoji">🌱</div>
+          <h5 class="fw-bold mb-1" style="font-size: 0.9rem;">超！超！！初心者</h5>
+          <p class="extra-small text-secondary mb-2">まずは2つだけ</p>
+          <span class="badge bg-light text-secondary rounded-pill">約5分/日</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-entrance" style="animation-delay: 0.2s;">
+        <div class="lp-course-card h-100 text-center">
+          <div class="lp-course-emoji">🌿</div>
+          <h5 class="fw-bold mb-1" style="font-size: 0.9rem;">初心者</h5>
+          <p class="extra-small text-secondary mb-2">基本をマスター</p>
+          <span class="badge bg-light text-secondary rounded-pill">約10分/日</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-entrance" style="animation-delay: 0.3s;">
+        <div class="lp-course-card lp-course-recommended h-100 text-center">
+          <div class="lp-course-badge">おすすめ</div>
+          <div class="lp-course-emoji">🌳</div>
+          <h5 class="fw-bold mb-1" style="font-size: 0.9rem;">中級者</h5>
+          <p class="extra-small text-secondary mb-2">月3,000pt目標</p>
+          <span class="badge bg-primary text-white rounded-pill">約15分/日</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-entrance" style="animation-delay: 0.4s;">
+        <div class="lp-course-card h-100 text-center">
+          <div class="lp-course-emoji">🏔️</div>
+          <h5 class="fw-bold mb-1" style="font-size: 0.9rem;">上級者</h5>
+          <p class="extra-small text-secondary mb-2">徹底的に攻略</p>
+          <span class="badge bg-light text-secondary rounded-pill">約20分/日</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== セクション⑨ CTA ===== -->
+<section class="lp-section lp-section-cta">
+  <div class="container text-center">
+    <div class="animate-entrance">
+      <h2 class="h3 fw-bold text-white mb-3">まずは、生活の一部にしてみませんか？</h2>
+      <p class="text-white-50 mb-4">無料で始められます。あなたのペースで、あなたらしく。</p>
+      <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+        <%= button_to user_line_omniauth_authorize_path, data: { turbo: false }, class: "btn lp-btn-line px-5 py-3 fw-bold" do %>
+          <i class="bi bi-line fs-5 me-2"></i>LINEで始める
+        <% end %>
+        <%= link_to new_user_registration_path, class: "btn lp-btn-outline-white px-5 py-3 fw-bold" do %>
+          <i class="bi bi-envelope me-2"></i>メールで登録する
+        <% end %>
+      </div>
+      <p class="extra-small text-white-50 mt-4 mb-0">
+        <i class="bi bi-shield-check me-1"></i>個人情報は厳重に管理されています。LINEログインが最も簡単です。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- カウントアップアニメーション用スクリプト -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // IntersectionObserverでスクロールアニメーションを発火
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('lp-visible');
+        // カウントアップ要素の処理
+        if (entry.target.classList.contains('lp-countup')) {
+          animateCount(entry.target);
+        }
+        // 統計サークルの処理
+        if (entry.target.classList.contains('lp-stat-number')) {
+          animateCount(entry.target);
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+
+  // アニメーション対象を監視
+  document.querySelectorAll('.animate-entrance, .lp-countup, .lp-stat-number').forEach(el => {
+    observer.observe(el);
+  });
+
+  // カウントアップアニメーション
+  function animateCount(el) {
+    const target = parseInt(el.dataset.target || el.dataset.count);
+    if (!target || el.dataset.animated) return;
+    el.dataset.animated = 'true';
+    
+    const duration = 2000;
+    const start = performance.now();
+    
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutQuart
+      const eased = 1 - Math.pow(1 - progress, 4);
+      const current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  // パーティクルアニメーション（ヒーロー背景）
+  const canvas = document.getElementById('heroParticles');
+  if (canvas) {
+    const particles = [];
+    for (let i = 0; i < 30; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'lp-particle';
+      dot.style.left = Math.random() * 100 + '%';
+      dot.style.top = Math.random() * 100 + '%';
+      dot.style.animationDuration = (3 + Math.random() * 4) + 's';
+      dot.style.animationDelay = Math.random() * 3 + 's';
+      dot.style.width = dot.style.height = (2 + Math.random() * 4) + 'px';
+      canvas.appendChild(dot);
+    }
+  }
+});
+</script>

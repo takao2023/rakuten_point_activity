@@ -10,6 +10,7 @@ Sidekiq::Web.use Rack::Auth::Basic do |username, password|
 end if Rails.env.production?
 
 Rails.application.routes.draw do
+  get 'activity_logs/create'
   get 'campaigns/index'
   mount Sidekiq::Web => '/sidekiq'
   get 'line_bot/callback'
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :point_activity_targets do
     collection do
+      get :report
       post :upsert
       get :ensure_current_month_target
     end
@@ -34,8 +36,22 @@ Rails.application.routes.draw do
       post :bulk_create
     end
   end
+  resources :activity_executions, only: [:create]
+  resources :point_imports, only: [:new, :create, :index] do
+    member do
+      get :review
+      post :confirm
+    end
+  end
+  resources :activity_logs, only: [:create]
   resources :achievements, only: [:index]
+  resources :courses, only: [:index] do
+    collection do
+      post :select
+    end
+  end
   post '/callback', to: 'line_bot#callback'
 
-  root "dashboards#index"
+  get 'dashboard', to: 'dashboards#index', as: :dashboards
+  root "pages#home"
 end

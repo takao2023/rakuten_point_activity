@@ -1,17 +1,18 @@
 <footer id="footer" class="glass-footer text-white text-center mt-auto">
   <div class="container py-4 <%= 'pb-5' if current_user %> position-relative">
     <div class="mb-3">
-      <span class="fw-bold fs-5 text-white">楽天ポイ活マネジメント</span>
-      <p class="small opacity-75 mb-0 mt-1">楽天ポイ活を、データで加速させる。</p>
+      <span class="fw-bold fs-5 text-white">楽ポイ活マネジメント</span>
+      <p class="small opacity-75 mb-0 mt-1">ポイ活を、データで加速させる。</p>
     </div>
     
     <div class="d-flex justify-content-center gap-3 mb-3 small">
-      <%= link_to "ホーム", root_path, class: "text-white text-decoration-none opacity-75 hover-opacity-100" %>
-      <%= link_to "ポイ活一覧", point_activity_targets_path, class: "text-white text-decoration-none opacity-75 hover-opacity-100" %>
+      <%= link_to "ホーム", dashboards_path, class: "text-white text-decoration-none opacity-75 hover-opacity-100" %>
+      <%= link_to "完了報告", report_point_activity_targets_path, class: "text-white text-decoration-none opacity-75 hover-opacity-100" %>
+      <%= link_to "進捗確認", point_activity_targets_path, class: "text-white text-decoration-none opacity-75 hover-opacity-100" %>
     </div>
 
     <hr class="border-light opacity-25 my-3">
     
-    <p class="extra-small opacity-50 mb-0">© <%= Time.zone.today.year %> 楽天ポイ活マネジメント All rights reserved.</p>
+    <p class="extra-small opacity-50 mb-0">© <%= Time.zone.today.year %> 楽ポイ活マネジメント All rights reserved.</p>
   </div>
 </footer>
